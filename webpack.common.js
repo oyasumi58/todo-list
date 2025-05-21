@@ -20,4 +20,24 @@ module.exports = {
     minimize: true,
     minimizer: [new TerserPlugin()],
     },
+    module: {
+        rules: [
+            {
+                test: /\.css$/i,
+                use: ["style-loader","css-loader"],
+            },
+            {
+                test: /\.html$/i,
+                use: ["html-loader"],
+            },
+            {
+                test: /\.(png|jpg|jpeg|svg|gif)$/i,
+                type: "asset/resource"
+            },
+            {
+                test: /\.(woff|woff2)$/i,
+                type: 'asset/resource',
+            },
+        ],
+  },
 };
