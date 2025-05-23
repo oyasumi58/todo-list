@@ -3,23 +3,21 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
-    entry: {
-        app: './src/index.js',
-    },
+    entry: "./src/index.js",
     plugins: [
         new HtmlWebpackPlugin({
-        title: 'Production',
+            template: "./src/template.html",
         }),
     ],
     output: {
-        filename: '[name].bundle.js',
+        filename: 'main.js',
         path: path.resolve(__dirname, 'dist'),
         clean: true,
     },
-    optimization: {
-    minimize: true,
-    minimizer: [new TerserPlugin()],
-    },
+    // optimization: {
+    // minimize: true,
+    // minimizer: [new TerserPlugin()],
+    // },
     module: {
         rules: [
             {
