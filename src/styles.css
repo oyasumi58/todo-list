@@ -41,9 +41,14 @@ body {
 }
 
 dialog {
+    padding: 0px;
     border: 3px solid grey;
     border-radius: 15px;
     font-size: 1.5rem;
+}
+
+dialog > div {
+    padding: 24px;
 }
 
 dialog input {
@@ -141,4 +146,16 @@ button.submit {
 
 button.submit:hover {
     background-color: var(--btn-hover-color);
+}
+
+#Pcontainer {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+select {
+    border-radius: 15px;
+    font-size: 1.2rem;
+    padding: 5px;
 }
