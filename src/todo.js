@@ -1,4 +1,4 @@
-console.log("deydwe");
+console.log("todo checkw");
 
 class Todo {
     static array = [];
@@ -14,6 +14,5 @@ class Todo {
     }   
 }
 
-console.log(Todo.array);
 
 export { Todo };

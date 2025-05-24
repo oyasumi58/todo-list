@@ -1,10 +1,12 @@
 import { Todo } from './todo.js';
+import "./dom.js";
+
+console.log("appl check");
 
 function giveBtnsEvent() {
     let clickState = true;
     const todoBtn = document.querySelector('#newTodoBtn');
     const dialog = document.querySelector('dialog');
-    console.log("d");
 
     todoBtn.addEventListener("click",() => { 
         if (clickState) {
@@ -60,6 +62,7 @@ function giveBtnsEvent() {
         new Todo(titleInfo,descInfo,dateInfo,timeInfo,priorityInfo,projectInfo);
         console.log(Todo.array);
         refreshModule();
+        dialog.close();
     })
 
     //to refresh module

@@ -1,38 +1,81 @@
 body {
-    background: rgb(201, 201, 201);
+    
     margin: 0px;
     padding: 0px;
-
+    font-family: Helvetica, Arial,  sans-serif;
 
     /* custom prop */
     --btn-bg-color: rgb(228, 118, 137);
-    --btn-border-color: rgb(224, 164, 192);
+    --btn-border-color: rgb(175, 102, 102);
     --btn-hover-color: rgb(211, 106, 124);
+    /* layout */
+    height: 100vh;
+    overflow-y: hidden;
+    gap: 15px;
 }
 
 #newTodoBtn {
-    background-color: rgb(228, 118, 137);
+    background-color: var(--btn-bg-color);
     font-size: 4.5rem;
     color: white;
     padding: 0px 20px 0px;
-    border: 5px solid rgb(224, 164, 192);
+    border: 5px solid var(--btn-border-color);
     border-radius: 90px;
     position: absolute;
     box-shadow: 5px 6px 13px 3px rgba(0,0,0,0.34);
-    bottom: 10px;
-    right: 10px;
+    bottom: 70px;
+    right: 20px;
 }
 
 #newTodoBtn:hover {
-    background-color: rgb(211, 106, 124);
+    background-color: var(--btn-hover-color);
     /* border: 5px solid rgb(194, 137, 163); */
 }
 
 
 #newTodoBtn:active {
-    bottom: 8px;
-    right: 8px;
+    bottom: 68px;
+    right: 18px;
 }
+
+.wrapper {
+    display: flex;
+    
+}
+
+.wrapper > div { /*side and main divs*/
+    --block-padding: 20px;
+    padding: var(--block-padding);
+    font-size: 1.2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+#sidebar {
+    height: calc(100vh - 15px - 15px - 1.5rem - 2 * var(--block-padding)); 
+    width: 30%;
+    background: rgb(245, 238, 238);
+    overflow-y: auto;
+}
+
+#main {
+    width: 70%;
+    height: 100vh - 15px - 15px - 1.5rem;
+    overflow-y: auto;
+}
+
+
+footer {
+    font-size: 1.2rem;
+    line-height: 1.5rem;
+    background-color: rgb(187, 98, 113);
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    padding: 15px;
+}
+
+
 
 /* New todo modal */
 ::backdrop {
@@ -159,3 +202,4 @@ select {
     font-size: 1.2rem;
     padding: 5px;
 }
+
