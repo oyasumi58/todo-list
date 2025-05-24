@@ -7,5 +7,39 @@
 </head>
 <body>
     <div>erefwefwr</div>
+    <button type="button" id="newTodoBtn">+</button>
+
+
+
+     <dialog>
+        <h3>Create new todo</h3>
+        <hr>
+        <form method="dialog">
+            <p>
+                <label for="title">Title:</label>
+                <input autocomplete="off" type="text" id="title">
+            </p>
+            <p>
+                <label for="desc">Description:</label>
+                <input autocomplete="off" type="text" id="desc">
+            </p>
+            <p>
+                <label for="dueDate">Due By:</label>
+                <input autocmplete="off" type="date" id="dueDate">
+                <input autocmplete="off" type="time" id="dueTime">
+            </p>
+            <p>
+                <div id="priorityCon">
+                    <label for="priority">Priority: </label>
+                    <button type="button" class="priorityBtn selected" id="trivialBtn">Trivial</button>
+                    <button type="button" class="priorityBtn" id="standardBtn">Standard</button>
+                    <button type="button" class="priorityBtn" id="imptBtn">Important</button>
+                </div>
+            </p>
+            <div class="buttongrp">
+                <button class="submit" type="button">Create Todo</button>
+            </div>
+        </form>
+    </dialog>
 </body>
 </html>
