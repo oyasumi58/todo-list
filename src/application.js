@@ -1,5 +1,5 @@
 import { Todo } from './todo.js';
-import "./dom.js";
+import { TodoElement, domManager } from "./dom.js";
 
 console.log("appl check");
 
@@ -59,10 +59,11 @@ function giveBtnsEvent() {
         let projectInfo = projInput.value;
         console.log(projectInfo);
         //title,desc = '',dueDate = 'none',dueTime = 'none',priority = 'Trivial',project = "General"
-        new Todo(titleInfo,descInfo,dateInfo,timeInfo,priorityInfo,projectInfo);
+        let todo = new Todo(titleInfo,descInfo,dateInfo,timeInfo,priorityInfo,projectInfo);
         console.log(Todo.array);
         refreshModule();
         dialog.close();
+        let todoEl = new TodoElement(todo);
     })
 
     //to refresh module
