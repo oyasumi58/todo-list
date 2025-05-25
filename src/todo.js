@@ -1,4 +1,6 @@
-console.log("todod check");
+import { formatManager, c } from "./date.js"
+export { formatManager, c } 
+console.log("todo check");
 
 class Todo {
     static array = [];
@@ -15,6 +17,8 @@ class Todo {
     }   
 
     static sortArrayInAll = function(arr) {
+        console.log(arr);
+        if (arr === undefined) {console.log("failed"); return}
         const sortArr = arr.sort(function(el1,el2) {
             if (!el1.dueDate && !el2.dueDate) {
                 return 0
@@ -39,8 +43,38 @@ class Todo {
         console.log(sortArr);
         return sortArr; 
     }
+
+    static filterArrayinToday = function(arr) {
+        console.log(arr);
+        return arr.filter(dateFilter);
+    }
+
+    static filterArrayForProj = function(arr,projName) {
+        console.log(arr);
+        
+        return arr.filter((elem) => {
+            return projFilter(elem,projName);
+        });
+    }
 }
 
+const cat = new Todo("cat","","2025-05-25","17:53",'Trivial',"General");
+const rat = new Todo("rat","","2025-05-07","17:53",'Trivial',"General");
 
+function dateFilter(todoObj) {
+    c(todoObj.dueDate);
+    const today = formatManager.formatToday();
+    const todoDate = formatManager.formatDateY(todoObj.dueDate);
+   
+    console.log(today);
+    console.log(todoDate);
+    return todoDate === today;
+}
 
-export { Todo };
+function projFilter(elem,projName) {
+    console.log(elem.project.toLowerCase());
+    console.log(projName);
+    return elem.project.toLowerCase() === projName;
+}
+
+export { Todo, cat, rat };

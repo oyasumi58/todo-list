@@ -1,6 +1,8 @@
-import { Todo, TodoElement, domManager } from "./dom.js";
+import { getOverlappingDaysInIntervals } from "date-fns";
+import { Todo, TodoElement, domManager,c } from "./dom.js";
 
 console.log("appl check");
+let currentTab = "all";
 
 function giveBtnsEvent() {
     let clickState = true;
@@ -68,6 +70,8 @@ function giveBtnsEvent() {
             let sortArr;
             if (currentTab === "all") {
                 sortArr = Todo.sortArrayInAll(Todo.array);
+            } else if (currentTab === "today") {
+                sortArr = Todo.sortArrayInAll(Todo.filterArrayinToday(Todo.array));
             }
             domManager.appendTodoInAll(sortArr);
         } else {
@@ -79,19 +83,27 @@ function giveBtnsEvent() {
     //ui tab button events:
     const todayTab = document.querySelector("#today");
     const allTab = document.querySelector("#all");
+    const generalTab = document.querySelector("#general");
     todayTab.addEventListener("click", () => {
         if (currentTab === "today") {
             return;
         }
         uiManager.switchMainTab("today");
-        console.log(currentTab);
+        //console.log(currentTab);
     });
     allTab.addEventListener("click", () => {
         if (currentTab === "all") {
             return;
         }
         uiManager.switchMainTab("all");
-        console.log(currentTab);
+        //c//onsole.log(currentTab);
+    });
+    generalTab.addEventListener("click", () => {
+        if (currentTab === "general") {
+            return;
+        }
+        uiManager.switchMainTab("general");
+        //c//onsole.log(currentTab);
     });
 
 
@@ -116,19 +128,34 @@ function giveBtnsEvent() {
     return refreshModule;
 }
 
-let currentTab = "all";
-
 const uiManager = (function() {
     const switchMainTab = function(tab) {
         switch (tab) {
             case "today":
                 currentTab = "today";
-                console.log(currentTab);
+                //console.log(currentTab);
                 domManager.dispSelectedTab("today");
+                //console.log(Todo.array);
+                const filteredArr = Todo.filterArrayinToday(Todo.array);
+                //console.log(filteredArr);
+                const sortArr1 = Todo.sortArrayInAll(filteredArr);
+                domManager.appendTodoInAll(sortArr1);
                 break;
             case "all":
                 currentTab = "all";
                 domManager.dispSelectedTab("all");
+                const sortArr2 = Todo.sortArrayInAll(Todo.array);
+                domManager.wipe();
+                domManager.appendTodoInAll(sortArr2)
+                break;
+
+            case "general":
+                currentTab = "general";
+                domManager.dispSelectedTab("general");
+                const filteredArr3 = Todo.filterArrayForProj(Todo.array,"general");
+                const sortArr3 = Todo.sortArrayInAll(filteredArr3);
+                domManager.wipe();
+                domManager.appendTodoInAll(sortArr3)
                 break;
         }
     }

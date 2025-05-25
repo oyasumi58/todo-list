@@ -1,6 +1,5 @@
-export { Todo } from './todo.js';
-import { formatManager } from "./date.js";
-
+import { cat,rat,Todo, formatManager,c } from './todo.js';
+export { Todo, formatManager,c } 
 
 console.log("dom check");
 const main = document.querySelector("#main");
@@ -64,8 +63,11 @@ class TodoElement {
     }
 }
 
+
+
 const domManager = (function() {
     const appendTodoInAll = function(sortArr) {
+        if (sortArr === undefined) {console.log("failed"); return}
         wipe();
         let sortedArray = [];
          sortArr.forEach((todo) => { //in order of todo obj
@@ -101,5 +103,8 @@ const domManager = (function() {
     return { appendTodoInAll, wipe, dispSelectedTab, };
 })();
 
+new TodoElement(cat);
+new TodoElement(rat);
+domManager.appendTodoInAll(Todo.array);
 
 export { domManager, TodoElement };
