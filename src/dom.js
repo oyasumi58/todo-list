@@ -14,7 +14,10 @@ class TodoElement {
         todoElem.setAttribute("class","todo");
         todoElem.setAttribute("name","done");
         todoElem.setAttribute("data-unique",`${todo.unique}`);
+        todoElem.setAttribute("data-priority",`${todo.priority}`);
         
+        domManager.stylePriority(todoElem);
+
         const row1 = document.createElement("div");
         row1.setAttribute("class","row1");
         const row2 = document.createElement("div");
@@ -100,7 +103,32 @@ const domManager = (function() {
         console.log(selTab);
         selTab.classList.add("selected");
     }
-    return { appendTodoInAll, wipe, dispSelectedTab, };
+
+    const stylePriority = function(todoEl) {
+        switch (todoEl.getAttribute("data-priority")) {
+            case "Trivial":
+                if (!todoEl.classList.contains("trivial")) {
+                  todoEl.classList.add("trivial");  
+                }
+                break;
+            case "Standard":
+                if (!todoEl.classList.contains("standard")) {
+                  todoEl.classList.add("standard");  
+                }
+                break;
+            case "Important":
+                if (!todoEl.classList.contains("important")) {
+                  todoEl.classList.add("important");  
+                }
+                break;
+            default:
+                console.log(todoEl.getAttribute("data-priority"));
+                break;
+        }
+    }
+
+
+    return { appendTodoInAll, wipe, dispSelectedTab, stylePriority, };
 })();
 
 new TodoElement(cat);

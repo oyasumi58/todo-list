@@ -147,6 +147,14 @@ body {
     }
 }
 
+.todo.trivial {
+    border-left: 5px solid rgb(61, 163, 61) !important;
+}
+
+.todo.important {
+    border-left: 5px solid rgb(190, 92, 92) !important;
+}
+
 .todoTitle {
     font-size: 1.4rem;
     margin-left: 5px;
