@@ -1,6 +1,6 @@
 export { Todo } from './todo.js';
 import { formatManager } from "./date.js";
-import { Todo } from './todo.js';
+
 
 console.log("dom check");
 const main = document.querySelector("#main");
@@ -66,9 +66,7 @@ class TodoElement {
 
 const domManager = (function() {
     const appendTodoInAll = function(sortArr) {
-        const main = document.querySelector("#main");
-        console.log(sortArr);
-        main.innerHTML = "";
+        wipe();
         let sortedArray = [];
          sortArr.forEach((todo) => { //in order of todo obj
             TodoElement.dispArray.forEach((todoEl) => {
@@ -84,8 +82,23 @@ const domManager = (function() {
         })
     }
     
-    
-    return { appendTodoInAll };
+    const wipe = function() {
+        const main = document.querySelector("#main");
+        main.innerHTML = "";
+        const title = document.createElement('h2');
+        title.setAttribute("id","maintitle");
+        title.textContent = "Todos";
+        main.appendChild(title);
+    }
+
+    const dispSelectedTab = function(tab) {
+        const prevSelTab = document.querySelector(".selected");
+        prevSelTab.classList.remove("selected");
+        const selTab =  document.querySelector(`#${tab}`);
+        console.log(selTab);
+        selTab.classList.add("selected");
+    }
+    return { appendTodoInAll, wipe, dispSelectedTab, };
 })();
 
 

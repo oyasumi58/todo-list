@@ -65,13 +65,35 @@ function giveBtnsEvent() {
 
             setTimeout(() => {refreshModule()},10); //to avoid dumb error
             let todoEl = new TodoElement(todo);
-            const sortArr = Todo.sortArrayInAll(Todo.array);
+            let sortArr;
+            if (currentTab === "all") {
+                sortArr = Todo.sortArrayInAll(Todo.array);
+            }
             domManager.appendTodoInAll(sortArr);
         } else {
             form.reportValidity();
         }
         
     })
+
+    //ui tab button events:
+    const todayTab = document.querySelector("#today");
+    const allTab = document.querySelector("#all");
+    todayTab.addEventListener("click", () => {
+        if (currentTab === "today") {
+            return;
+        }
+        uiManager.switchMainTab("today");
+        console.log(currentTab);
+    });
+    allTab.addEventListener("click", () => {
+        if (currentTab === "all") {
+            return;
+        }
+        uiManager.switchMainTab("all");
+        console.log(currentTab);
+    });
+
 
     //to refresh module
     function refreshModule() {
@@ -94,12 +116,25 @@ function giveBtnsEvent() {
     return refreshModule;
 }
 
+let currentTab = "all";
 
-const sortManager = (function() {
-    
+const uiManager = (function() {
+    const switchMainTab = function(tab) {
+        switch (tab) {
+            case "today":
+                currentTab = "today";
+                console.log(currentTab);
+                domManager.dispSelectedTab("today");
+                break;
+            case "all":
+                currentTab = "all";
+                domManager.dispSelectedTab("all");
+                break;
+        }
+    }
 
 
-    return
+    return {currentTab,switchMainTab};
 })();
 
 const manager = giveBtnsEvent();

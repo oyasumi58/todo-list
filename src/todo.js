@@ -1,4 +1,4 @@
-console.log("todo check");
+console.log("todod check");
 
 class Todo {
     static array = [];
@@ -17,16 +17,12 @@ class Todo {
     static sortArrayInAll = function(arr) {
         const sortArr = arr.sort(function(el1,el2) {
             if (!el1.dueDate && !el2.dueDate) {
-                console.log(1);
                 return 0
             } else if (el1.dueDate && !el2.dueDate) {
-                console.log(2);
                 return -1
             } else if (!el1.dueDate && el2.dueDate) {
-                console.log(3);
                 return 1
             } else {
-                console.log(4);
                 let date1 = new Date(`${el1.dueDate} ${el1.dueTime}`);
                 let date2 = new Date(`${el2.dueDate} ${el2.dueTime}`);
                 console.log(date1);

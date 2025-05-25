@@ -71,6 +71,51 @@ body {
     overflow-y: auto;
 }
 
+#sidebarProjCon {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    & #createProjBtn {
+        height: min-content;
+        padding: 5px 10px 5px;
+    }
+}
+
+#sidebar > div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#sidebar button {
+    background-color: rgb(245, 238, 238);
+    border: 1px solid  rgb(245, 238, 238);
+    font-size: 1.5rem;
+    color: rgb(160, 94, 94);
+    font-weight: bold;
+    border-radius: 25px;
+    padding: 5px;
+}
+
+#sidebar button:hover {
+    transition: 0.4s;
+    background-color: rgb(218, 207, 207);
+}
+
+#sidebar .selected {
+    background-color: rgb(196, 180, 180);
+    color: rgb(88, 58, 58);
+}
+
+#sidebar .selected:hover {
+    background-color: rgb(196, 180, 180);
+}
+
+
+
+
+
 #main {
     width: 70%;
     height: 100vh - 15px - 15px - 1.5rem;
@@ -127,26 +172,7 @@ body {
     content: "By: "
 }
 
-#sidebar > div {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
 
-#sidebar button {
-    background-color: rgb(245, 238, 238);
-    border: 1px solid  rgb(245, 238, 238);
-    font-size: 1.5rem;
-    color: rgb(160, 94, 94);
-    font-weight: bold;
-    border-radius: 25px;
-    padding: 5px;
-}
-
-#sidebar button:hover {
-    transition: 0.4s;
-    background-color: rgb(218, 207, 207);
-}
 
 .checkCon {
     position: relative;
