@@ -34,10 +34,10 @@
                     </div>
                     <div class="row2">
                         <div class="todoProj">
-                            #General
+                            General
                         </div>
                         <div class="todoDateGrp">
-                            2 55 203085 3.45pm
+                            2025-05-03 3.45pm
                         </div>
                     </div>
                 </div>
@@ -56,16 +56,16 @@
             <form method="dialog">
                 <p>
                     <label for="title">Title:</label>
-                    <input minlength="1" autocomplete="off" type="text" id="title">
+                    <input required name="todo_title" minlength="1" autocomplete="off" type="text" id="title">
                 </p>
                 <p>
                     <label for="desc">Description:</label>
-                    <input autocomplete="off" type="text" id="desc">
+                    <input name="todo_desc" autocomplete="off" type="text" id="desc">
                 </p>
                 <p>
                     <label for="dueDate">Due By:</label>
-                    <input autocmplete="off" type="date" id="dueDate">
-                    <input autocmplete="off" type="time" id="dueTime">
+                    <input name="todo_dueDate" autocmplete="off" type="date" id="dueDate">
+                    <input name="todo_dueTime" autocmplete="off" type="time" id="dueTime">
                 </p>
                 <p id="Pcontainer">
                     <label>Project: </label>
@@ -83,7 +83,7 @@
             </p>
                 <div class="buttongrp">
                     
-                    <button class="submit" type="button">Create Todo</button>
+                    <button class="submit" type="submit">Create Todo</button>
                 </div>
             </form>
         </div>

@@ -1,5 +1,4 @@
-import { Todo } from './todo.js';
-import { TodoElement, domManager } from "./dom.js";
+import { Todo, TodoElement, domManager } from "./dom.js";
 
 console.log("appl check");
 
@@ -51,19 +50,27 @@ function giveBtnsEvent() {
     //to actually create todo:
     const createBtn = document.querySelector(".submit");
     createBtn.addEventListener("click",() => {
-        let titleInfo = titleInput.value;
-      
-        let descInfo = descInput.value;
-        let dateInfo = dateInput.value;
-        let timeInfo = timeInput.value;
-        let projectInfo = projInput.value;
-        console.log(projectInfo);
-        //title,desc = '',dueDate = 'none',dueTime = 'none',priority = 'Trivial',project = "General"
-        let todo = new Todo(titleInfo,descInfo,dateInfo,timeInfo,priorityInfo,projectInfo);
-        console.log(Todo.array);
-        refreshModule();
-        dialog.close();
-        let todoEl = new TodoElement(todo);
+        const form = document.querySelector("form"); 
+        if (form.checkValidity()) {
+            let titleInfo = titleInput.value;
+            let descInfo = descInput.value;
+            let dateInfo = dateInput.value;
+            let timeInfo = timeInput.value;
+            let projectInfo = projInput.value;
+            console.log(projectInfo);
+            //title,desc = '',dueDate = 'none',dueTime = 'none',priority = 'Trivial',project = "General"
+            let todo = new Todo(titleInfo,descInfo,dateInfo,timeInfo,priorityInfo,projectInfo);
+            console.log(Todo.array);
+            dialog.close();
+
+            setTimeout(() => {refreshModule()},10); //to avoid dumb error
+            let todoEl = new TodoElement(todo);
+            const sortArr = Todo.sortArrayInAll(Todo.array);
+            domManager.appendTodoInAll(sortArr);
+        } else {
+            form.reportValidity();
+        }
+        
     })
 
     //to refresh module
@@ -87,6 +94,13 @@ function giveBtnsEvent() {
     return refreshModule;
 }
 
+
+const sortManager = (function() {
+    
+
+
+    return
+})();
 
 const manager = giveBtnsEvent();
 

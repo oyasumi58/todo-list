@@ -1,13 +1,20 @@
+export { Todo } from './todo.js';
+import { formatManager } from "./date.js";
+import { Todo } from './todo.js';
+
 console.log("dom check");
 const main = document.querySelector("#main");
 
 
 class TodoElement {
+
+    static dispArray = [];
+
     constructor(todo) {
         const todoElem = document.createElement("div");
         todoElem.setAttribute("class","todo");
         todoElem.setAttribute("name","done");
-        
+        todoElem.setAttribute("data-unique",`${todo.unique}`);
         
         const row1 = document.createElement("div");
         row1.setAttribute("class","row1");
@@ -16,8 +23,8 @@ class TodoElement {
         todoElem.appendChild(row1);
         todoElem.appendChild(row2);
 
-        const checkCon = document.createElement("div");
-        checkCon.setAttribute("div","checkCon");
+        const checkCon = document.createElement("label");
+        checkCon.setAttribute("class","checkCon");
         row1.appendChild(checkCon);
 
         const checkbox = document.createElement("input");
@@ -29,28 +36,56 @@ class TodoElement {
 
 
         const titleDiv = document.createElement("div");
+        titleDiv.setAttribute("class","todoTitle");
         titleDiv.textContent = todo.title;
         row1.appendChild(titleDiv);
         const projDiv = document.createElement("div");
+        projDiv.setAttribute("class","todoProj");
         projDiv.textContent = todo.project;
         row2.appendChild(projDiv);
-        const dateDiv = document.createElement("div");
-        dateDiv.textContent = todo.dueDate;
-        row2.appendChild(dateDiv);
-        const timeDiv = document.createElement("div");
-        timeDiv.textContent = todo.dueTime;
-        row2.appendChild(timeDiv);
-        main.appendChild(todoElem);
+
+        const dateGrp = document.createElement("div");
+        dateGrp.setAttribute("class","todoDateGrp");
+        let rawDate, formattedDate;
+
+        if (todo.dueTime && todo.dueDate) {
+            rawDate = `${todo.dueDate} ${todo.dueTime}`;
+            formattedDate = formatManager.formatDateAndTime(rawDate)
+        } else if (todo.dueDate && !todo.dueTime) {
+            rawDate = `${todo.dueDate}`;
+            formattedDate = formatManager.formatDate(rawDate)
+        }
+        
+        dateGrp.textContent = formattedDate;
+        row2.appendChild(dateGrp);
+        TodoElement.dispArray.push(todoElem);
+       return todoElem;
+        //main.appendChild(todoElem);
     }
 }
 
 const domManager = (function() {
-    const appendTodo = function(todo) {
-        let todo1 = new TodoElement(todo);
+    const appendTodoInAll = function(sortArr) {
+        const main = document.querySelector("#main");
+        console.log(sortArr);
+        main.innerHTML = "";
+        let sortedArray = [];
+         sortArr.forEach((todo) => { //in order of todo obj
+            TodoElement.dispArray.forEach((todoEl) => {
+                if (todo.unique === todoEl.getAttribute("data-unique")) {
+                    sortedArray.push(todoEl);
+                    return
+                }
+            })
+            console.log(sortedArray);
+            sortedArray.forEach((sortedTodo) => {
+                main.appendChild(sortedTodo);
+            })
+        })
     }
     
     
-    return { appendTodo };
+    return { appendTodoInAll };
 })();
 
 
