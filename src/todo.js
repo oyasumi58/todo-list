@@ -1,4 +1,4 @@
-console.log("todo checks");
+console.log("todo check");
 
 class Todo {
     static array = [];

@@ -16,10 +16,18 @@ class TodoElement {
         todoElem.appendChild(row1);
         todoElem.appendChild(row2);
 
+        const checkCon = document.createElement("div");
+        checkCon.setAttribute("div","checkCon");
+        row1.appendChild(checkCon);
 
         const checkbox = document.createElement("input");
         checkbox.setAttribute("type","checkbox");
-        row1.appendChild(checkbox);
+        checkCon.appendChild(checkbox);
+        const checkmark = document.createElement("span");
+        checkmark.setAttribute("class","checkmark");
+        checkCon.appendChild(checkmark);
+
+
         const titleDiv = document.createElement("div");
         titleDiv.textContent = todo.title;
         row1.appendChild(titleDiv);
