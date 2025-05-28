@@ -1,5 +1,8 @@
 import { cat,rat,Todo, formatManager,c } from './todo.js';
 export { Todo, formatManager,c } 
+import editImg from "./asset/square-edit-outline.svg";
+import { EventEmitter } from 'events';
+const emitter = new EventEmitter();
 
 console.log("dom check");
 const main = document.querySelector("#main");
@@ -25,6 +28,11 @@ class TodoElement {
         todoElem.appendChild(row1);
         todoElem.appendChild(row2);
 
+        const titleDiv = document.createElement("div");
+        titleDiv.setAttribute("class","todoTitle");
+        titleDiv.textContent = todo.title;
+        row1.appendChild(titleDiv);
+
         const checkCon = document.createElement("label");
         checkCon.setAttribute("class","checkCon");
         row1.appendChild(checkCon);
@@ -37,18 +45,33 @@ class TodoElement {
         checkCon.appendChild(checkmark);
 
 
-        const titleDiv = document.createElement("div");
-        titleDiv.setAttribute("class","todoTitle");
-        titleDiv.textContent = todo.title;
-        row1.appendChild(titleDiv);
+        // const editBtn = document.createElement("button");
+        // editBtn.setAttribute("class","editBtn");
+        // editBtn.setAttribute("type","button");
+        // editBtn.textContent = "View and Edit"
+        // row1.appendChild(editBtn);
+
+        const editBtn = document.createElement("input");
+        editBtn.setAttribute("class","editBtn");
+        editBtn.setAttribute("type","image");
+        editBtn.setAttribute("src",editImg);
+        //editBtn.textContent = "View and Edit"
+        row1.appendChild(editBtn);
+
         const projDiv = document.createElement("div");
         projDiv.setAttribute("class","todoProj");
         projDiv.textContent = todo.project;
         row2.appendChild(projDiv);
 
+        const flexCon = document.createElement("div");
+        flexCon.setAttribute("class","flexCon");
+        row2.appendChild(flexCon);
+
         const dateGrp = document.createElement("div");
         dateGrp.setAttribute("class","todoDateGrp");
         let rawDate, formattedDate;
+
+      
 
         if (todo.dueTime && todo.dueDate) {
             rawDate = `${todo.dueDate} ${todo.dueTime}`;
@@ -59,7 +82,27 @@ class TodoElement {
         }
         
         dateGrp.textContent = formattedDate;
-        row2.appendChild(dateGrp);
+
+        
+        flexCon.appendChild(dateGrp);
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.setAttribute("class","deleteBtn");
+        deleteBtn.setAttribute("type","button");
+        deleteBtn.textContent = "🗑️"
+        flexCon.appendChild(deleteBtn);
+        
+        const todoData = {
+            title: todo.title,
+            desc: todo.desc,
+            dueDate: todo.dueDate,
+            dueTime: todo.dueTime,
+            project: todo.project,
+            priority: todo.priority
+        }
+
+        signalAddEvent(editBtn,deleteBtn,todoData);
+
         TodoElement.dispArray.push(todoElem);
        return todoElem;
         //main.appendChild(todoElem);
@@ -127,12 +170,21 @@ const domManager = (function() {
         }
     }
 
+    const fillModal = function(todoEl) {
 
-    return { appendTodoInAll, wipe, dispSelectedTab, stylePriority, };
+    }
+
+
+    return { fillModal, appendTodoInAll, wipe, dispSelectedTab, stylePriority, };
 })();
 
 new TodoElement(cat);
 new TodoElement(rat);
 domManager.appendTodoInAll(Todo.array);
 
-export { domManager, TodoElement };
+function signalAddEvent(editBtn,deleteBtn,todoData) {
+    emitter.emit('actionDone',editBtn,deleteBtn,todoData);
+}
+
+
+export { domManager, TodoElement, emitter, signalAddEvent };

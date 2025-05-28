@@ -1,13 +1,14 @@
-import { getOverlappingDaysInIntervals } from "date-fns";
-import { Todo, TodoElement, domManager,c } from "./dom.js";
+// import { format, parseISO } from "date-fns";
+import { Todo, TodoElement, domManager,c, signalAddEvent, emitter } from "./dom.js";
 
 console.log("appl check");
 let currentTab = "all";
+const editDia = document.querySelector("#editDia");
 
 function giveBtnsEvent() {
     let clickState = true;
     const todoBtn = document.querySelector('#newTodoBtn');
-    const dialog = document.querySelector('dialog');
+    const dialog = document.querySelector('#createDia');
 
     todoBtn.addEventListener("click",() => { 
         if (clickState) {
@@ -22,11 +23,17 @@ function giveBtnsEvent() {
             e.stopPropagation(); //to prevent it from bubbling to dialog if clicked on child
         }
     })
+    editDia.addEventListener("click", (e) => {
+        if (e.target === editDia) { //dialog element is the bg, rest is children
+            editDia.close();
+            e.stopPropagation(); //to prevent it from bubbling to dialog if clicked on child
+        }
+    })
 
 
     //priority buttons
     const priorityBtns = document.querySelectorAll(".priorityBtn");
-    let priorityInfo = "";
+    let priorityInfo = "Trivial";
     // console.log(priorityBtns);
     priorityBtns.forEach(btn => {
         btn.addEventListener("click",(e) => {
@@ -59,7 +66,7 @@ function giveBtnsEvent() {
             let dateInfo = dateInput.value;
             let timeInfo = timeInput.value;
             let projectInfo = projInput.value;
-            console.log(projectInfo);
+            // console.log(priorityInfo);
             //title,desc = '',dueDate = 'none',dueTime = 'none',priority = 'Trivial',project = "General"
             let todo = new Todo(titleInfo,descInfo,dateInfo,timeInfo,priorityInfo,projectInfo);
             console.log(Todo.array);
@@ -67,6 +74,12 @@ function giveBtnsEvent() {
 
             setTimeout(() => {refreshModule()},10); //to avoid dumb error
             let todoEl = new TodoElement(todo);
+            // todoEl.addEventListener("click",(e) => {
+            //     editDia.showModal();
+            //     console.log(e.target);
+            //     domManager.fillModal(e.target);
+            // });
+
             let sortArr;
             if (currentTab === "all") {
                 sortArr = Todo.sortArrayInAll(Todo.array);
@@ -163,6 +176,44 @@ const uiManager = (function() {
 
     return {currentTab,switchMainTab};
 })();
+
+emitter.on('actionDone', (editBtn,deleteBtn,data) => {
+    console.log(editBtn,deleteBtn,data);
+    editBtn.addEventListener("click", ()=> {
+        const editTitle = document.querySelector("#editTitle");
+        editTitle.value = data.title;
+        const editDesc = document.querySelector("#editDesc");
+        editDesc.value = data.desc;
+        const editDueDate = document.querySelector("#editDueDate");
+        editDueDate.value = data.dueDate;
+        const editDueTime = document.querySelector("#editDueTime");
+        editDueTime.value = data.dueTime;
+        const editProjSelect = document.querySelector("#editProjSelect");
+        editProjSelect.value = data.project;
+        
+        const buttons = document.querySelectorAll(".priorityBtn");
+        buttons.forEach((button) => {
+            if (button.classList.contains("selected")) {
+                button.classList.remove("selected");
+            }
+        });
+        buttons.forEach((button) => {
+            if (button.getAttribute("data-name") === data.priority) {
+                button.classList.add("selected");
+            }
+        })
+            editDia.showModal();
+        })  
+})
+
+editDia.addEventListener("close", () => {
+    const btn = document.querySelector("#trivialBtn");
+    if (!btn.classList.contains("selected")) {
+        btn.classList.add("selected");    
+    }
+})
+
+
 
 const manager = giveBtnsEvent();
 

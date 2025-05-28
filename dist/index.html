@@ -10,19 +10,21 @@
         <div class="wrapper">
             <div id="sidebar">
                 <h2 id="sidebarTitle">OyaDo</h3>
-                <div id="mainChoices">
-                    
-                    <button type="button">Today</button>
-                    <button type="button">All</button>
+                <div id="mainChoices">                   
+                    <button id="today" type="button">Today</button>
+                    <button id="all" class="selected" type="button">All</button>
                 </div>
                 <div id="projChoices">
-                    <h3>Projects</h3>
-                    <button type="button">General</button>
+                    <div id="sidebarProjCon">
+                        <h3>Projects</h3>
+                        <button id="createProjBtn" type="button">+</button>
+                    </div>
+                    <button id="general" type="button">General</button>
                 </div>
             </div>
             <div id="main">
                 <h2 id="mainTitle"> Todos </h3>
-                <div class="todo">
+                <div class="todo trivial">
                     <div class="row1">
                        <label class="checkCon">
                             <input name="done" type="checkbox">
@@ -49,23 +51,23 @@
     </div>
     <button type="button" id="newTodoBtn">+</button>
     
-    <dialog>
+    <dialog id="createDia">
         <div>
             <h3>Create new todo</h3>
             <hr>
             <form method="dialog">
                 <p>
                     <label for="title">Title:</label>
-                    <input minlength="1" autocomplete="off" type="text" id="title">
+                    <input required name="todo_title" minlength="1" autocomplete="off" type="text" id="title">
                 </p>
                 <p>
                     <label for="desc">Description:</label>
-                    <input autocomplete="off" type="text" id="desc">
+                    <input name="todo_desc" autocomplete="off" type="text" id="desc">
                 </p>
                 <p>
                     <label for="dueDate">Due By:</label>
-                    <input autocmplete="off" type="date" id="dueDate">
-                    <input autocmplete="off" type="time" id="dueTime">
+                    <input name="todo_dueDate" autocmplete="off" type="date" id="dueDate">
+                    <input name="todo_dueTime" autocmplete="off" type="time" id="dueTime">
                 </p>
                 <p id="Pcontainer">
                     <label>Project: </label>
@@ -83,7 +85,46 @@
             </p>
                 <div class="buttongrp">
                     
-                    <button class="submit" type="button">Create Todo</button>
+                    <button class="submit" type="submit">Create Todo</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+    <dialog id="editDia">
+        <div>
+            <h3 >View and Edit</h3>
+            <hr>
+            <form method="dialog">
+                <p>
+                    <label for="title">Title:</label>
+                    <input required name="todo_title" minlength="1" autocomplete="off" type="text" id="editTitle">
+                </p>
+                <p>
+                    <label for="desc">Description:</label>
+                    <input name="todo_desc" autocomplete="off" type="text" id="editDesc">
+                </p>
+                <p>
+                    <label for="dueDate">Due By:</label>
+                    <input name="todo_dueDate" autocmplete="off" type="date" id="editDueDate">
+                    <input name="todo_dueTime" autocmplete="off" type="time" id="editDueTime">
+                </p>
+                <p id="Pcontainer">
+                    <label>Project: </label>
+                    <select name="Project_type" id="editProjSelect">
+                        <option value="General">General</option>
+                    </select>
+                </p>
+                <p>
+                    <div id="priorityCon">
+                        <label>Priority: </label>
+                        <button type="button" data-name="Trivial" class="priorityBtn selected" id="trivialBtn">Trivial</button>
+                        <button type="button" data-name="Standard" class="priorityBtn" id="standardBtn">Standard</button>
+                        <button type="button" data-name="Important" class="priorityBtn" id="imptBtn">Important</button>
+                    </div>
+                </p>
+                <div class="buttongrp">
+                    <button class="edit" type="button">Edit Todo</button>
+                    
                 </div>
             </form>
         </div>
