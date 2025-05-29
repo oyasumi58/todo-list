@@ -101,7 +101,7 @@ class TodoElement {
             priority: todo.priority
         }
 
-        signalAddEvent(editBtn,deleteBtn,todoData);
+        signalAddEvent(editBtn,deleteBtn,todoData,todo);
 
         TodoElement.dispArray.push(todoElem);
        return todoElem;
@@ -174,16 +174,95 @@ const domManager = (function() {
 
     }
 
+    const editTodo = function(unique,todoObj) {
+        const todoEl = document.querySelector(`[data-unique="${unique}"]`);
+        console.log(todoObj);
 
-    return { fillModal, appendTodoInAll, wipe, dispSelectedTab, stylePriority, };
+        // todoElem.setAttribute("class","todo");
+        // todoElem.setAttribute("name","done");
+        // todoElem.setAttribute("data-unique",`${todo.unique}`);
+        todoEl.setAttribute("data-priority",`${todoObj.priority}`);
+        
+        domManager.stylePriority(todoEl);
+
+        const row1 = todoEl.querySelector(".row1");
+        // row1.setAttribute("class","row1");
+        console.log(row1);
+
+        const row2 = todoEl.querySelector(".row2");
+        // row2.setAttribute("class","row2");
+        console.log(row2);
+
+        // todoEl.appendChild(row1);
+        // todoEl.appendChild(row2);
+
+        const titleDiv = todoEl.querySelector(".todoTitle");
+        titleDiv.textContent = todoObj.title;
+        // row1.appendChild(titleDiv);
+
+        // const checkCon = document.createElement("label");
+        // checkCon.setAttribute("class","checkCon");
+        // row1.appendChild(checkCon);
+
+        // const checkbox = document.createElement("input");
+        // checkbox.setAttribute("type","checkbox");
+        // checkCon.appendChild(checkbox);
+        // const checkmark = document.createElement("span");
+        // checkmark.setAttribute("class","checkmark");
+        // checkCon.appendChild(checkmark);
+
+        // const editBtn = document.createElement("input");
+        // editBtn.setAttribute("class","editBtn");
+        // editBtn.setAttribute("type","image");
+        // editBtn.setAttribute("src",editImg);
+        //editBtn.textContent = "View and Edit"
+        // row1.appendChild(editBtn);
+
+        const projDiv = todoEl.querySelector(".todoProj");
+        // projDiv.setAttribute("class","todoProj");
+        projDiv.textContent = todoObj.project;
+        // row2.appendChild(projDiv);
+
+        const flexCon = todoEl.querySelector(".flexCon");
+        // flexCon.setAttribute("class","flexCon");
+        // row2.appendChild(flexCon);
+
+        const dateGrp = todoEl.querySelector(".todoDateGrp");
+        // dateGrp.setAttribute("class","todoDateGrp");
+        let rawDate, formattedDate;
+
+      
+
+        if (todoObj.dueTime && todoObj.dueDate) {
+            rawDate = `${todoObj.dueDate} ${todoObj.dueTime}`;
+            formattedDate = formatManager.formatDateAndTime(rawDate)
+        } else if (todoObj.dueDate && !todoObj.dueTime) {
+            rawDate = `${todoObj.dueDate}`;
+            formattedDate = formatManager.formatDate(rawDate)
+        }
+        
+        dateGrp.textContent = formattedDate;
+
+        
+        // flexCon.appendChild(dateGrp);
+
+        // const deleteBtn = document.createElement("button");
+        // deleteBtn.setAttribute("class","deleteBtn");
+        // deleteBtn.setAttribute("type","button");
+        // deleteBtn.textContent = "🗑️"
+        // flexCon.appendChild(deleteBtn);
+    }
+
+
+    return { editTodo, fillModal, appendTodoInAll, wipe, dispSelectedTab, stylePriority, };
 })();
 
 new TodoElement(cat);
 new TodoElement(rat);
 domManager.appendTodoInAll(Todo.array);
 
-function signalAddEvent(editBtn,deleteBtn,todoData) {
-    emitter.emit('actionDone',editBtn,deleteBtn,todoData);
+function signalAddEvent(editBtn,deleteBtn,todoData,todoObj) {
+    emitter.emit('actionDone',editBtn,deleteBtn,todoData,todoObj);
 }
 
 

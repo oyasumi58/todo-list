@@ -34,6 +34,9 @@ function giveBtnsEvent() {
     //priority buttons
     const priorityBtns = document.querySelectorAll(".priorityBtn");
     let priorityInfo = "Trivial";
+    dialog.addEventListener("open",() => {
+        refreshModule();
+    });
     // console.log(priorityBtns);
     priorityBtns.forEach(btn => {
         btn.addEventListener("click",(e) => {
@@ -59,7 +62,7 @@ function giveBtnsEvent() {
     //to actually create todo:
     const createBtn = document.querySelector(".submit");
     createBtn.addEventListener("click",() => {
-        const form = document.querySelector("form"); 
+        const form = document.querySelector("#formCreate"); 
         if (form.checkValidity()) {
             let titleInfo = titleInput.value;
             let descInfo = descInput.value;
@@ -177,19 +180,19 @@ const uiManager = (function() {
     return {currentTab,switchMainTab};
 })();
 
-emitter.on('actionDone', (editBtn,deleteBtn,data) => {
-    console.log(editBtn,deleteBtn,data);
+emitter.on('actionDone', (editBtn,deleteBtn,data,todoObj) => {
+    console.log(todoObj);
     editBtn.addEventListener("click", ()=> {
         const editTitle = document.querySelector("#editTitle");
-        editTitle.value = data.title;
+        editTitle.value = todoObj.title;
         const editDesc = document.querySelector("#editDesc");
-        editDesc.value = data.desc;
+        editDesc.value = todoObj.desc;
         const editDueDate = document.querySelector("#editDueDate");
-        editDueDate.value = data.dueDate;
+        editDueDate.value = todoObj.dueDate;
         const editDueTime = document.querySelector("#editDueTime");
-        editDueTime.value = data.dueTime;
+        editDueTime.value = todoObj.dueTime;
         const editProjSelect = document.querySelector("#editProjSelect");
-        editProjSelect.value = data.project;
+        editProjSelect.value = todoObj.project;
         
         const buttons = document.querySelectorAll(".priorityBtn");
         buttons.forEach((button) => {
@@ -198,20 +201,55 @@ emitter.on('actionDone', (editBtn,deleteBtn,data) => {
             }
         });
         buttons.forEach((button) => {
-            if (button.getAttribute("data-name") === data.priority) {
+            if (button.getAttribute("data-name") === todoObj.priority) {
                 button.classList.add("selected");
             }
         })
             editDia.showModal();
         })  
+    
+    const appendEditBtn = document.querySelector(".edit");
+    appendEditBtn.addEventListener(("click"), () => {
+    const form = document.querySelector("#formEdit"); 
+    if (form.checkValidity()) {
+        todoObj.title = editTitle.value;
+        todoObj.desc = editDesc.value;
+        todoObj.dueDate = editDueDate.value;
+        todoObj.dueTime = editDueTime.value;
+        todoObj.project = editProjSelect.value;
+        editDia.close();
+
+        // let sortArr;
+        // if (currentTab === "all") {
+        //     sortArr = Todo.sortArrayInAll(Todo.array);
+        // } else if (currentTab === "today") {
+        //     sortArr = Todo.sortArrayInAll(Todo.filterArrayinToday(Todo.array));
+        // }
+        // domManager.appendTodoInAll(sortArr);
+        const editedTodo = domManager.editTodo(todoObj.unique,todoObj);
+        console.log(editedTodo);
+
+        let sortArr;
+        if (currentTab === "all") {
+            sortArr = Todo.sortArrayInAll(Todo.array);
+        } else if (currentTab === "today") {
+            sortArr = Todo.sortArrayInAll(Todo.filterArrayinToday(Todo.array));
+        }
+        domManager.appendTodoInAll(sortArr);
+    } else {
+        form.reportValidity();
+    }
+    })
 })
 
 editDia.addEventListener("close", () => {
     const btn = document.querySelector("#trivialBtn");
     if (!btn.classList.contains("selected")) {
         btn.classList.add("selected");    
+
     }
 })
+
 
 
 
