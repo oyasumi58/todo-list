@@ -21,7 +21,7 @@ body {
     --btn-hover-color: rgb(211, 106, 124);
     /* layout */
     height: 100vh;
-    /* overflow-y: hidden; */
+    overflow-y: hidden;
     gap: 15px;
     text-overflow: hidden;
 }
@@ -118,10 +118,12 @@ body {
 
 
 #main {
-    width: 70%;
-    height: 100vh - 15px - 15px - 1.5rem;
-    overflow: auto;
-    gap: 15px;
+    display: flex;
+    flex-direction: column; 
+    width: 100%;
+    height: 100%;
+    /* height: 100vh - 15px - 15px - 1.5rem; */
+    gap: 15px; 
 
     & .todo {
         display: flex;
@@ -152,6 +154,14 @@ body {
     & .todo:hover {
         background-color: rgb(226, 206, 206);
     }
+}
+
+#scrollContainer {
+    width: 70%;
+    height: calc(100vh - 15px - 15px - 1.5rem - 2 * var(--block-padding));
+    
+    overflow-y: auto;
+    gap: 15px;
 }
 
 .flexCon {
