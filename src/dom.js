@@ -152,17 +152,23 @@ const domManager = (function() {
         switch (todoEl.getAttribute("data-priority")) {
             case "Trivial":
                 if (!todoEl.classList.contains("trivial")) {
-                  todoEl.classList.add("trivial");  
+                    todoEl.classList.remove("standard");
+                    todoEl.classList.remove("important");
+                    todoEl.classList.add("trivial");  
                 }
                 break;
             case "Standard":
                 if (!todoEl.classList.contains("standard")) {
-                  todoEl.classList.add("standard");  
+                    todoEl.classList.remove("trivial");
+                    todoEl.classList.remove("important");
+                    todoEl.classList.add("standard");  
                 }
                 break;
             case "Important":
                 if (!todoEl.classList.contains("important")) {
-                  todoEl.classList.add("important");  
+                    todoEl.classList.remove("trivial");
+                    todoEl.classList.remove("standard");
+                    todoEl.classList.add("important");  
                 }
                 break;
             default:

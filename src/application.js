@@ -5,6 +5,8 @@ console.log("appl check");
 let currentTab = "all";
 const editDia = document.querySelector("#editDia");
 
+let priorityInfo = "Trivial";
+
 function giveBtnsEvent() {
     let clickState = true;
     const todoBtn = document.querySelector('#newTodoBtn');
@@ -33,7 +35,7 @@ function giveBtnsEvent() {
 
     //priority buttons
     const priorityBtns = document.querySelectorAll(".priorityBtn");
-    let priorityInfo = "Trivial";
+    // let priorityInfo = "Trivial";
     dialog.addEventListener("open",() => {
         refreshModule();
     });
@@ -181,8 +183,9 @@ const uiManager = (function() {
 
 let currentTodoBeingEdited = null;
 
+
 emitter.on('actionDone', (editBtn,deleteBtn,data,todoObj) => {
-    console.log(todoObj);
+    // console.log(todoObj);
     editBtn.addEventListener("click", (e)=> {
         const todoEl = e.target.parentElement.parentElement;
         console.log(todoEl);
@@ -222,40 +225,46 @@ emitter.on('actionDone', (editBtn,deleteBtn,data,todoObj) => {
         })  
     
     const appendEditBtn = document.querySelector(".edit");
-    appendEditBtn.addEventListener("click", (e) => {
-      
-        
-    console.log(currentTodoBeingEdited);
-    const form = document.querySelector("#formEdit"); 
-    if (form.checkValidity()) {
-        currentTodoBeingEdited.title = editTitle.value;
-        currentTodoBeingEdited.desc = editDesc.value;
-        currentTodoBeingEdited.dueDate = editDueDate.value;
-        currentTodoBeingEdited.dueTime = editDueTime.value;
-        currentTodoBeingEdited.project = editProjSelect.value;
-        editDia.close();
+    appendEditBtn.addEventListener("click", () => {   
+        console.log(currentTodoBeingEdited);
+        const todoEl = document.querySelector(`[data-unique='${currentTodoBeingEdited.unique}']`);
+        console.log(todoEl);
+        const form = document.querySelector("#formEdit"); 
+        if (form.checkValidity()) {
+            currentTodoBeingEdited.title = editTitle.value;
+            currentTodoBeingEdited.desc = editDesc.value;
+            currentTodoBeingEdited.dueDate = editDueDate.value;
+            currentTodoBeingEdited.dueTime = editDueTime.value;
+            currentTodoBeingEdited.project = editProjSelect.value;
+            currentTodoBeingEdited.priority = priorityInfo;
+            domManager.stylePriority(todoEl);
+            editDia.close();
 
-        const editedTodo = domManager.editTodo(currentTodoBeingEdited.unique,currentTodoBeingEdited);
-        console.log(editedTodo);
+            const editedTodo = domManager.editTodo(currentTodoBeingEdited.unique,currentTodoBeingEdited);
+            console.log(editedTodo);
 
-        let sortArr;
-        if (currentTab === "all") {
-            sortArr = Todo.sortArrayInAll(Todo.array);
-        } else if (currentTab === "today") {
-            sortArr = Todo.sortArrayInAll(Todo.filterArrayinToday(Todo.array));
+            let sortArr;
+            if (currentTab === "all") {
+                sortArr = Todo.sortArrayInAll(Todo.array);
+            } else if (currentTab === "today") {
+                sortArr = Todo.sortArrayInAll(Todo.filterArrayinToday(Todo.array));
+            }
+            domManager.appendTodoInAll(sortArr);
+        } else {
+            form.reportValidity();
         }
-        domManager.appendTodoInAll(sortArr);
-    } else {
-        form.reportValidity();
-    }
-    })
+        })
 })
 
 editDia.addEventListener("close", () => {
-    const btn = document.querySelector("#trivialBtn");
-    if (!btn.classList.contains("selected")) {
-        btn.classList.add("selected");    
-
+    const imptBtn = document.querySelector("#imptBtn");
+    const sBtn = document.querySelector("#standardBtn");
+    const tBtn = document.querySelector("#trivialBtn");
+    console.log("editDia clsoed!");
+    if (!tBtn.classList.contains("selected")) {
+        sBtn.classList.remove("selected");
+        imptBtn.classList.remove("selected");
+        tBtn.classList.add("selected");    
     }
 })
 
