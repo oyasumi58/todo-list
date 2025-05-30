@@ -264,13 +264,13 @@ const domManager = (function() {
     return { editTodo, fillModal, appendTodoInAll, wipe, dispSelectedTab, stylePriority, };
 })();
 
-new TodoElement(cat);
-new TodoElement(rat);
+const catEl = new TodoElement(cat);
+const ratEl =new TodoElement(rat);
 domManager.appendTodoInAll(Todo.array);
 
 function signalAddEvent(editBtn,deleteBtn,todoData,todoObj) {
-    emitter.emit('actionDone',editBtn,deleteBtn,todoData,todoObj);
+    emitter.emit('actionDone',editBtn,todoData,todoObj);
 }
 
 
-export { domManager, TodoElement, emitter, signalAddEvent };
+export { domManager, TodoElement, emitter, signalAddEvent,catEl,ratEl };

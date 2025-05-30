@@ -58,8 +58,8 @@ class Todo {
     }
 }
 
-const cat = new Todo("cat","","2025-05-25","17:53",'Trivial',"General");
-const rat = new Todo("rat","","2025-05-07","17:53",'Trivial',"General");
+const cat = new Todo("cat","","2025-05-07","17:53",'Trivial',"General");
+const rat = new Todo("rat","","2025-05-25","17:53",'Trivial',"General");
 
 function dateFilter(todoObj) {
     c(todoObj.dueDate);

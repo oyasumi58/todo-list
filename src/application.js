@@ -1,5 +1,5 @@
 // import { format, parseISO } from "date-fns";
-import { Todo, TodoElement, domManager,c, signalAddEvent, emitter } from "./dom.js";
+import { catEl, ratEl, Todo, TodoElement, domManager,c, signalAddEvent, emitter } from "./dom.js";
 
 console.log("appl check");
 let currentTab = "all";
@@ -181,12 +181,10 @@ const uiManager = (function() {
     return {currentTab,switchMainTab};
 })();
 
-let currentTodoBeingEdited = null;
+const todoManager = (function() {
+    let currentTodoBeingEdited = null;
 
-
-emitter.on('actionDone', (editBtn,deleteBtn,data,todoObj) => {
-    // console.log(todoObj);
-    editBtn.addEventListener("click", (e)=> {
+    function addEditEvent(editBtn,data,todoObj) {editBtn.addEventListener("click", (e)=> {
         const todoEl = e.target.parentElement.parentElement;
         console.log(todoEl);
 
@@ -224,36 +222,87 @@ emitter.on('actionDone', (editBtn,deleteBtn,data,todoObj) => {
             editDia.showModal();
         })  
     
-    const appendEditBtn = document.querySelector(".edit");
-    appendEditBtn.addEventListener("click", () => {   
-        console.log(currentTodoBeingEdited);
-        const todoEl = document.querySelector(`[data-unique='${currentTodoBeingEdited.unique}']`);
-        console.log(todoEl);
-        const form = document.querySelector("#formEdit"); 
-        if (form.checkValidity()) {
-            currentTodoBeingEdited.title = editTitle.value;
-            currentTodoBeingEdited.desc = editDesc.value;
-            currentTodoBeingEdited.dueDate = editDueDate.value;
-            currentTodoBeingEdited.dueTime = editDueTime.value;
-            currentTodoBeingEdited.project = editProjSelect.value;
-            currentTodoBeingEdited.priority = priorityInfo;
-            domManager.stylePriority(todoEl);
-            editDia.close();
+        const appendEditBtn = document.querySelector(".edit");
+        appendEditBtn.addEventListener("click", () => {   
+            console.log(currentTodoBeingEdited);
+            const todoEl = document.querySelector(`[data-unique='${currentTodoBeingEdited.unique}']`);
+            console.log(todoEl);
+            const form = document.querySelector("#formEdit"); 
+            if (form.checkValidity()) {
+                currentTodoBeingEdited.title = editTitle.value;
+                currentTodoBeingEdited.desc = editDesc.value;
+                currentTodoBeingEdited.dueDate = editDueDate.value;
+                currentTodoBeingEdited.dueTime = editDueTime.value;
+                currentTodoBeingEdited.project = editProjSelect.value;
+                currentTodoBeingEdited.priority = priorityInfo;
+                domManager.stylePriority(todoEl);
+                editDia.close();
 
-            const editedTodo = domManager.editTodo(currentTodoBeingEdited.unique,currentTodoBeingEdited);
-            console.log(editedTodo);
+                const editedTodo = domManager.editTodo(currentTodoBeingEdited.unique,currentTodoBeingEdited);
+                console.log(editedTodo);
 
-            let sortArr;
-            if (currentTab === "all") {
-                sortArr = Todo.sortArrayInAll(Todo.array);
-            } else if (currentTab === "today") {
-                sortArr = Todo.sortArrayInAll(Todo.filterArrayinToday(Todo.array));
+                let sortArr;
+                if (currentTab === "all") {
+                    sortArr = Todo.sortArrayInAll(Todo.array);
+                } else if (currentTab === "today") {
+                    sortArr = Todo.sortArrayInAll(Todo.filterArrayinToday(Todo.array));
+                }
+                domManager.appendTodoInAll(sortArr);
+            } else {
+                form.reportValidity();
             }
-            domManager.appendTodoInAll(sortArr);
-        } else {
-            form.reportValidity();
-        }
         })
+    }
+
+    function addDeleteEvent(deleteBtn) {
+        console.log(deleteBtn);
+        deleteBtn.addEventListener("click",(e) => {
+            const todoEl = e.target.parentElement.parentElement.parentElement;
+            // console.log(todoEl);
+             for (let todo of Todo.array) {
+                // console.log(todo);
+                // console.log(todoEl)
+                if (todo.unique === todoEl.getAttribute("data-unique")) {
+                    currentTodoBeingEdited = todo;
+                    // console.log(currentTodoBeingEdited);
+                    console.log("it has been founded");
+                }
+            }
+            // console.log(currentTodoBeingEdited);
+        
+            const response = confirm("Are you sure you want to delete this?");
+            if (!response) { return; };
+                Todo.array.forEach((todo) => {
+                    console.log(todo);
+                    console.log(currentTodoBeingEdited);
+                    if (todo.unique === currentTodoBeingEdited.unique) {
+                        Todo.array.splice(Todo.array.indexOf(todo),1);
+                        todoEl.remove();
+                        console.log(Todo.array);
+                    } else {
+                        console.log("todo delete error");
+                    }
+                })
+            
+        })
+    }
+
+    return {addEditEvent, addDeleteEvent};
+})();
+
+const catEditBtn = catEl.querySelector(".editBtn");
+const catDeleteBtn = catEl.querySelector(".deleteBtn");
+todoManager.addEditEvent(catEditBtn);
+todoManager.addDeleteEvent(catDeleteBtn);
+
+const ratEditBtn = ratEl.querySelector(".editBtn");
+const ratDeleteBtn = ratEl.querySelector(".deleteBtn");
+todoManager.addEditEvent(ratEditBtn);
+todoManager.addDeleteEvent(ratDeleteBtn);
+
+emitter.on('actionDone', (editBtn,deleteBtn,data,todoObj) => {
+    todoManager.addEditEvent(editBtn,data,todoObj);
+    todoManager.addDeleteEvent(deleteBtn);
 })
 
 editDia.addEventListener("close", () => {
