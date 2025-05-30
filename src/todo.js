@@ -29,8 +29,8 @@ class Todo {
             } else {
                 let date1 = new Date(`${el1.dueDate} ${el1.dueTime}`);
                 let date2 = new Date(`${el2.dueDate} ${el2.dueTime}`);
-                console.log(date1);
-                console.log(date2);
+                //console.log(date1);
+                //console.log(date2);
                 if (date1 > date2) {
                     return 1;
                 } else if (date1 < date2) {

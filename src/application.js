@@ -82,7 +82,6 @@ function giveBtnsEvent() {
             //     console.log(e.target);
             //     domManager.fillModal(e.target);
             // });
-
             let sortArr;
             if (currentTab === "all") {
                 sortArr = Todo.sortArrayInAll(Todo.array);
@@ -180,19 +179,33 @@ const uiManager = (function() {
     return {currentTab,switchMainTab};
 })();
 
+let currentTodoBeingEdited = null;
+
 emitter.on('actionDone', (editBtn,deleteBtn,data,todoObj) => {
     console.log(todoObj);
-    editBtn.addEventListener("click", ()=> {
+    editBtn.addEventListener("click", (e)=> {
+        const todoEl = e.target.parentElement.parentElement;
+        console.log(todoEl);
+
+        for (let todo of Todo.array) {
+            if (todo.unique === todoEl.getAttribute("data-unique")) {
+                currentTodoBeingEdited = todo;
+                console.log("it has been founded");
+            }
+        }
+
+        console.log(currentTodoBeingEdited);
+
         const editTitle = document.querySelector("#editTitle");
-        editTitle.value = todoObj.title;
+        editTitle.value = currentTodoBeingEdited.title;
         const editDesc = document.querySelector("#editDesc");
-        editDesc.value = todoObj.desc;
+        editDesc.value = currentTodoBeingEdited.desc;
         const editDueDate = document.querySelector("#editDueDate");
-        editDueDate.value = todoObj.dueDate;
+        editDueDate.value = currentTodoBeingEdited.dueDate;
         const editDueTime = document.querySelector("#editDueTime");
-        editDueTime.value = todoObj.dueTime;
+        editDueTime.value = currentTodoBeingEdited.dueTime;
         const editProjSelect = document.querySelector("#editProjSelect");
-        editProjSelect.value = todoObj.project;
+        editProjSelect.value = currentTodoBeingEdited.project;
         
         const buttons = document.querySelectorAll(".priorityBtn");
         buttons.forEach((button) => {
@@ -201,7 +214,7 @@ emitter.on('actionDone', (editBtn,deleteBtn,data,todoObj) => {
             }
         });
         buttons.forEach((button) => {
-            if (button.getAttribute("data-name") === todoObj.priority) {
+            if (button.getAttribute("data-name") === currentTodoBeingEdited.priority) {
                 button.classList.add("selected");
             }
         })
@@ -209,24 +222,20 @@ emitter.on('actionDone', (editBtn,deleteBtn,data,todoObj) => {
         })  
     
     const appendEditBtn = document.querySelector(".edit");
-    appendEditBtn.addEventListener(("click"), () => {
+    appendEditBtn.addEventListener("click", (e) => {
+      
+        
+    console.log(currentTodoBeingEdited);
     const form = document.querySelector("#formEdit"); 
     if (form.checkValidity()) {
-        todoObj.title = editTitle.value;
-        todoObj.desc = editDesc.value;
-        todoObj.dueDate = editDueDate.value;
-        todoObj.dueTime = editDueTime.value;
-        todoObj.project = editProjSelect.value;
+        currentTodoBeingEdited.title = editTitle.value;
+        currentTodoBeingEdited.desc = editDesc.value;
+        currentTodoBeingEdited.dueDate = editDueDate.value;
+        currentTodoBeingEdited.dueTime = editDueTime.value;
+        currentTodoBeingEdited.project = editProjSelect.value;
         editDia.close();
 
-        // let sortArr;
-        // if (currentTab === "all") {
-        //     sortArr = Todo.sortArrayInAll(Todo.array);
-        // } else if (currentTab === "today") {
-        //     sortArr = Todo.sortArrayInAll(Todo.filterArrayinToday(Todo.array));
-        // }
-        // domManager.appendTodoInAll(sortArr);
-        const editedTodo = domManager.editTodo(todoObj.unique,todoObj);
+        const editedTodo = domManager.editTodo(currentTodoBeingEdited.unique,currentTodoBeingEdited);
         console.log(editedTodo);
 
         let sortArr;

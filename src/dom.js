@@ -102,6 +102,7 @@ class TodoElement {
         }
 
         signalAddEvent(editBtn,deleteBtn,todoData,todo);
+        
 
         TodoElement.dispArray.push(todoElem);
        return todoElem;
