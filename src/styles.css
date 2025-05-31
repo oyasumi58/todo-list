@@ -65,6 +65,7 @@ body {
     flex-direction: column;
 }
 
+/* sidebar styles */
 #sidebar {
     height: calc(100vh - 15px - 15px - 1.5rem - 2 * var(--block-padding)); 
     width: min(30%,300px);
@@ -113,10 +114,20 @@ body {
     background-color: rgb(196, 180, 180);
 }
 
+.projTabIntermediate {
+    border: 3px solid var(--btn-border-color);
+    border-radius: 15px;
+    outline: none;
+    background : #eeeeee00;
+    border-radius: 25px;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: rgb(160, 94, 94);
+}
 
 
-
-
+/* main stuff */
 #main {
     display: flex;
     flex-direction: column; 
@@ -414,9 +425,64 @@ button.submit:hover,button.edit:hover {
     align-items: center;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+select, ::picker(select) {
+    appearance: base-select;
+}
+
 select {
+    border: 2px solid #ddd;
     border-radius: 15px;
     font-size: 1.2rem;
     padding: 5px;
+    width: 7rem;
 }
 
+select:hover {
+    background: rgb(216, 186, 186);
+
+}
+
+select::picker-icon {
+    rotate: 180deg;
+}
+
+::picker(select) {
+  border: none;
+}
+
+option {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+    padding: 5px 3px 5px;
+    border: 2px solid #ddd;
+    background: #eee;
+    border-radius: 10px;
+}
+
+option:hover {
+    background: rgb(216, 186, 186);
+}
+
+option:focus {
+    background: rgb(216, 186, 186);
+}
+
+selectedcontent .icon {
+  display: none;
+}

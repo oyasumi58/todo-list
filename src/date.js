@@ -1,4 +1,4 @@
-import { format, parseISO, endOfToday } from 'date-fns';
+import { eachDayOfInterval, nextSunday, format, parseISO, endOfToday, isMonday, previousMonday, isSunday } from 'date-fns';
 
 const formatManager = (function() {
     const formatDateAndTime = function(inputDateAndTime) {
@@ -24,9 +24,23 @@ const formatManager = (function() {
             console.log(`no input date for ${inputDate}`);
             return;
         }
-        const date = parseISO(inputDate);
         
+        
+        const date = parseISO(inputDate);
+       
+
         const formattedDate = format(date,"yyyy MMM do")
+        return formattedDate;
+    }
+
+    const formatDateYWOISO = function(inputDate) {
+        if (!inputDate) {
+            console.log(`no input date for ${inputDate}`);
+            return;
+        }
+        const date = inputDate;
+        const formattedDate = format(date,"y MMM do");
+        console.log(formattedDate);
         return formattedDate;
     }
 
@@ -39,7 +53,31 @@ const formatManager = (function() {
         return today;
     }
 
-    return {formatDateAndTime, formatDate, formatDateY, formatToday};
+    const getWeek = function() {
+        const today = endOfToday();
+        let monday, sunday;
+        if (!isMonday(today)) {
+            monday = previousMonday(today);
+             if (!isSunday(today)) {
+                sunday = nextSunday(today);
+            } else {
+                sunday = today;
+            }
+        } else {
+            monday = today;
+            sunday = nextSunday(today);  
+        }
+        console.log(monday);
+        console.log(sunday);
+        
+        const week = eachDayOfInterval({
+            start: monday,
+            end: sunday
+        })
+        return week;
+    }
+
+    return {formatDateYWOISO,  getWeek, formatDateAndTime, formatDate, formatDateY, formatToday};
 })();
 
 formatManager.formatDate("2025-05-16 12:37");

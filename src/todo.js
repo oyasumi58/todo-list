@@ -49,13 +49,18 @@ class Todo {
         return arr.filter(dateFilter);
     }
 
+    static filterArrayInWeek = function(arr) {
+        console.log(arr);
+        return weekFilter(arr);
+    }
+
     static filterArrayForProj = function(arr,projName) {
         console.log(arr);
         
         return arr.filter((elem) => {
             return projFilter(elem,projName);
         });
-    }
+    } 
 }
 
 const cat = new Todo("cat","","2025-05-07","17:53",'Trivial',"General");
@@ -71,10 +76,66 @@ function dateFilter(todoObj) {
     return todoDate === today;
 }
 
+function weekFilter(arr) {
+    const matchArr = [];
+    arr.forEach((todoObj) => {
+        const today = formatManager.formatToday();
+        const todoDate = formatManager.formatDateY(todoObj.dueDate);
+        const week = formatManager.getWeek(today);
+
+        const formattedWeek = []; 
+        week.forEach((day)=> {
+        const forDay  = formatManager.formatDateYWOISO(day);
+        formattedWeek.push(forDay);
+        })
+        console.log(todoDate);
+        console.log(formattedWeek);
+        formattedWeek.forEach((day) => {
+            if (todoDate === day) {
+                matchArr.push(todoObj);
+                console.log(matchArr);
+            } else {
+                console.log("date void");
+            }
+        })
+    })
+    return matchArr;
+}
+
 function projFilter(elem,projName) {
     console.log(elem.project.toLowerCase());
     console.log(projName);
     return elem.project.toLowerCase() === projName;
 }
 
-export { Todo, cat, rat };
+class Project {
+    static array = [];
+
+    static createProject = function(title,array) {
+        const projTab = document.createElement("button");
+        projTab.setAttribute("class","projTab");
+        projTab.setAttribute("type","button");
+        projTab.setAttribute("data-project",title);
+
+        projTab.textContent = title;
+
+        const sidebar = document.querySelector("#sidebar");
+        console.log(sidebar);
+        sidebar.appendChild(projTab);
+
+        const proj = {
+            title: title,
+            unique: crypto.randomUUID(),
+        }
+
+        array.push(proj);
+        console.log(array);
+        return array;
+    }
+
+    static preventDuplicate = function(title) {
+
+    }
+}
+
+export { Project, Todo, cat, rat };

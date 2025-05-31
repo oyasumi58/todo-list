@@ -1,5 +1,5 @@
 // import { format, parseISO } from "date-fns";
-import { catEl, ratEl, Todo, TodoElement, domManager,c, signalAddEvent, emitter } from "./dom.js";
+import { Project, catEl, ratEl, Todo, TodoElement, domManager,c, signalAddEvent, emitter } from "./dom.js";
 
 console.log("appl check");
 let currentTab = "all";
@@ -100,7 +100,9 @@ function giveBtnsEvent() {
     //ui tab button events:
     const todayTab = document.querySelector("#today");
     const allTab = document.querySelector("#all");
-    const generalTab = document.querySelector("#general");
+    const thisWeekTab = document.querySelector("#thisWeek");
+    const generalTab = document.querySelector(`[data-project="general"]`);
+    console.log(todayTab)
     todayTab.addEventListener("click", () => {
         if (currentTab === "today") {
             return;
@@ -120,6 +122,13 @@ function giveBtnsEvent() {
             return;
         }
         uiManager.switchMainTab("general");
+        //c//onsole.log(currentTab);
+    });
+    thisWeekTab.addEventListener("click", () => {
+        if (currentTab === "thisWeek") {
+            return;
+        }
+        uiManager.switchMainTab("thisWeek");
         //c//onsole.log(currentTab);
     });
 
@@ -164,6 +173,15 @@ const uiManager = (function() {
                 const sortArr2 = Todo.sortArrayInAll(Todo.array);
                 domManager.wipe();
                 domManager.appendTodoInAll(sortArr2)
+                break;
+
+            case "thisWeek":
+                currentTab = "thisWeek";
+                domManager.dispSelectedTab("thisWeek");
+
+                const sortArr4 = Todo.filterArrayInWeek(Todo.array);
+                domManager.wipe();
+                domManager.appendTodoInAll(sortArr4)
                 break;
 
             case "general":
@@ -301,8 +319,10 @@ todoManager.addEditEvent(ratEditBtn);
 todoManager.addDeleteEvent(ratDeleteBtn);
 
 emitter.on('actionDone', (editBtn,deleteBtn,data,todoObj) => {
+    console.log(deleteBtn);
     todoManager.addEditEvent(editBtn,data,todoObj);
     todoManager.addDeleteEvent(deleteBtn);
+    console.log(deleteBtn);
 })
 
 editDia.addEventListener("close", () => {
@@ -317,10 +337,85 @@ editDia.addEventListener("close", () => {
     }
 })
 
+const projectManager = (function() {
+    function makeProject(newProjTab,e) {
+        if (newProjTab.isConnected) {
+                if (e) {
+                    e.preventDefault();
+                }
+                console.log(newProjTab.value.length);
+                console.log(testString(newProjTab.value));
+                if (newProjTab.value.length >= 1 && newProjTab.value.length <= 20 && testString(newProjTab.value)) {
+                    let projSame = false;
+                    Project.array.forEach((proj) => {
+                    if (newProjTab.value === proj.title) {
+                        alert("Projects cannot have the same name");
+                            
+                        // if (newProjTab.isConnected) {
+                        //     newProjTab.remove();  
+                        // }
+                        projSame = true;
+                    }
+                    })
+                    if (projSame) {return};
+
+                    Project.createProject(newProjTab.value,Project.array);
+                   
+                    if (newProjTab.isConnected) {
+                        newProjTab.remove();  
+                    }
+        } else {
+            alert("Project name must only contain numbers and letters");
+        }
+
+            }
+    }
+
+
+    return { makeProject };
+})();
+
+const createProjBtn = document.querySelector("#createProjBtn");
+
+createProjBtn.addEventListener("click", () => {
+    const newProjTab = document.createElement("input");
+    newProjTab.setAttribute("class","projTabIntermediate");
+    newProjTab.setAttribute("type","text");
+    // newProjTab.setAttribute("autofocus","");
+    newProjTab.setAttribute("placeholder","New project Name");
+
+    const sidebar = document.querySelector("#sidebar");
+    sidebar.appendChild(newProjTab);
+    newProjTab.focus();
+
+    let enterPressed = false;
+
+    newProjTab.onblur = function() {
+        if (enterPressed) {
+            enterPressed = false;
+            return;
+        }
+
+        projectManager.makeProject(newProjTab);
+    }; 
+
+    newProjTab.addEventListener("keydown", (e) => {
+        if (e.key !== 'Enter') {
+            return;
+        }
+
+        enterPressed = true;
+        console.log(newProjTab.value);
+        projectManager.makeProject(newProjTab,e);
+        
+    })
+})
 
 
 
 const manager = giveBtnsEvent();
 
-
+function testString(str) {
+    return /^[a-zA-Z0-9]+$/.test(str);
+}
 

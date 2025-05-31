@@ -1,5 +1,5 @@
-import { cat,rat,Todo, formatManager,c } from './todo.js';
-export { Todo, formatManager,c } 
+import { Project, cat,rat,Todo, formatManager,c } from './todo.js';
+export { Project, Todo, formatManager,c } 
 import editImg from "./asset/square-edit-outline.svg";
 import { EventEmitter } from 'events';
 const emitter = new EventEmitter();
@@ -143,7 +143,13 @@ const domManager = (function() {
     const dispSelectedTab = function(tab) {
         const prevSelTab = document.querySelector(".selected");
         prevSelTab.classList.remove("selected");
-        const selTab =  document.querySelector(`#${tab}`);
+        let selTab;
+        if (document.querySelector(`#${tab}`) !== null) {
+            selTab = document.querySelector(`#${tab}`);
+        } else {
+            selTab = document.querySelector(`[data-project="${tab}"]`);
+        }
+
         console.log(selTab);
         selTab.classList.add("selected");
     }
@@ -269,7 +275,7 @@ const ratEl =new TodoElement(rat);
 domManager.appendTodoInAll(Todo.array);
 
 function signalAddEvent(editBtn,deleteBtn,todoData,todoObj) {
-    emitter.emit('actionDone',editBtn,todoData,todoObj);
+    emitter.emit('actionDone',editBtn,deleteBtn,todoData,todoObj);
 }
 
 
