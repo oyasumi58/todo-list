@@ -172,7 +172,7 @@ const uiManager = (function() {
                 domManager.dispSelectedTab("all");
                 const sortArr2 = Todo.sortArrayInAll(Todo.array);
                 domManager.wipe();
-                domManager.appendTodoInAll(sortArr2)
+                domManager.appendTodoInAll(sortArr2);
                 break;
 
             case "thisWeek":
@@ -181,7 +181,7 @@ const uiManager = (function() {
 
                 const sortArr4 = Todo.filterArrayInWeek(Todo.array);
                 domManager.wipe();
-                domManager.appendTodoInAll(sortArr4)
+                domManager.appendTodoInAll(sortArr4);
                 break;
 
             case "general":
@@ -190,7 +190,17 @@ const uiManager = (function() {
                 const filteredArr3 = Todo.filterArrayForProj(Todo.array,"general");
                 const sortArr3 = Todo.sortArrayInAll(filteredArr3);
                 domManager.wipe();
-                domManager.appendTodoInAll(sortArr3)
+                domManager.appendTodoInAll(sortArr3);
+                break;
+
+            default: 
+                currentTab = tab;
+                console.log(tab);
+                domManager.dispSelectedTab(tab);
+                const filteredArr5 = Todo.filterArrayForProj(Todo.array,tab);
+                const sortArr5 = Todo.sortArrayInAll(filteredArr5);
+                domManager.wipe();
+                domManager.appendTodoInAll(sortArr5);
                 break;
         }
     }
@@ -349,18 +359,26 @@ const projectManager = (function() {
                     let projSame = false;
                     Project.array.forEach((proj) => {
                     if (newProjTab.value === proj.title) {
-                        alert("Projects cannot have the same name");
-                            
-                        // if (newProjTab.isConnected) {
-                        //     newProjTab.remove();  
-                        // }
+                        alert("Projects cannot have the same name"); 
                         projSame = true;
                     }
                     })
                     if (projSame) {return};
 
-                    Project.createProject(newProjTab.value,Project.array);
-                   
+                    const projTab = Project.createProject(newProjTab.value,Project.array);
+                    domManager.appendProjOptions("createDia",projTab.getAttribute("data-project"));
+                    domManager.appendProjOptions("editDia",projTab.getAttribute("data-project"));
+                    console.log(projTab);
+                    projTab.addEventListener("click", () => {
+                        if (currentTab === projTab.getAttribute("data-project")) {
+                            return;
+                        }
+                        // console.log("Hi");
+                        uiManager.switchMainTab(`${projTab.getAttribute("data-project")}`);
+                        //c//onsole.log(currentTab);
+                    })
+
+
                     if (newProjTab.isConnected) {
                         newProjTab.remove();  
                     }
@@ -378,15 +396,7 @@ const projectManager = (function() {
 const createProjBtn = document.querySelector("#createProjBtn");
 
 createProjBtn.addEventListener("click", () => {
-    const newProjTab = document.createElement("input");
-    newProjTab.setAttribute("class","projTabIntermediate");
-    newProjTab.setAttribute("type","text");
-    // newProjTab.setAttribute("autofocus","");
-    newProjTab.setAttribute("placeholder","New project Name");
-
-    const sidebar = document.querySelector("#sidebar");
-    sidebar.appendChild(newProjTab);
-    newProjTab.focus();
+    const newProjTab = domManager.createProjectEl();
 
     let enterPressed = false;
 
@@ -409,6 +419,13 @@ createProjBtn.addEventListener("click", () => {
         projectManager.makeProject(newProjTab,e);
         
     })
+    // thisWeekTab.addEventListener("click", () => {
+    //     if (currentTab === "thisWeek") {
+    //         return;
+    //     }
+    //     uiManager.switchMainTab("thisWeek");
+           
+    //     });
 })
 
 
@@ -416,6 +433,6 @@ createProjBtn.addEventListener("click", () => {
 const manager = giveBtnsEvent();
 
 function testString(str) {
-    return /^[a-zA-Z0-9]+$/.test(str);
+    return /^[a-zA-Z0-9\s]+$/.test(str);
 }
 

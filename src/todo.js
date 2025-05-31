@@ -130,11 +130,7 @@ class Project {
 
         array.push(proj);
         console.log(array);
-        return array;
-    }
-
-    static preventDuplicate = function(title) {
-
+        return projTab;
     }
 }
 

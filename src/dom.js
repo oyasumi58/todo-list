@@ -183,8 +183,27 @@ const domManager = (function() {
         }
     }
 
-    const fillModal = function(todoEl) {
+    const createProjectEl = function() {
+        const newProjTab = document.createElement("input");
+        newProjTab.setAttribute("class","projTabIntermediate");
+        newProjTab.setAttribute("type","text");
+        newProjTab.setAttribute("placeholder","New project Name");
 
+        const sidebar = document.querySelector("#sidebar");
+        sidebar.appendChild(newProjTab);
+        newProjTab.focus();
+        return newProjTab;
+    }
+
+    const appendProjOptions = function(dialogID,projTitle) {
+        
+        const dia = document.querySelector(`#${dialogID}`);
+        const select = dia.querySelector("select");
+
+        const projOption = document.createElement("option");
+        projOption.setAttribute("value",`${projTitle}`);
+        projOption.textContent = projTitle;
+        select.appendChild(projOption);
     }
 
     const editTodo = function(unique,todoObj) {
@@ -230,7 +249,6 @@ const domManager = (function() {
         // editBtn.setAttribute("src",editImg);
         //editBtn.textContent = "View and Edit"
         // row1.appendChild(editBtn);
-
         const projDiv = todoEl.querySelector(".todoProj");
         // projDiv.setAttribute("class","todoProj");
         projDiv.textContent = todoObj.project;
@@ -244,8 +262,6 @@ const domManager = (function() {
         // dateGrp.setAttribute("class","todoDateGrp");
         let rawDate, formattedDate;
 
-      
-
         if (todoObj.dueTime && todoObj.dueDate) {
             rawDate = `${todoObj.dueDate} ${todoObj.dueTime}`;
             formattedDate = formatManager.formatDateAndTime(rawDate)
@@ -253,12 +269,9 @@ const domManager = (function() {
             rawDate = `${todoObj.dueDate}`;
             formattedDate = formatManager.formatDate(rawDate)
         }
-        
         dateGrp.textContent = formattedDate;
-
         
         // flexCon.appendChild(dateGrp);
-
         // const deleteBtn = document.createElement("button");
         // deleteBtn.setAttribute("class","deleteBtn");
         // deleteBtn.setAttribute("type","button");
@@ -267,7 +280,7 @@ const domManager = (function() {
     }
 
 
-    return { editTodo, fillModal, appendTodoInAll, wipe, dispSelectedTab, stylePriority, };
+    return { appendProjOptions, createProjectEl, editTodo, appendTodoInAll, wipe, dispSelectedTab, stylePriority, };
 })();
 
 const catEl = new TodoElement(cat);
