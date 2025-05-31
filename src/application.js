@@ -155,6 +155,45 @@ function giveBtnsEvent() {
 }
 
 const uiManager = (function() {
+    const filterAndSort = function(tab) {
+        switch (tab) {
+            case "today":
+                const filteredArr = Todo.filterArrayinToday(Todo.array);
+                const sortArr = Todo.sortArrayInAll(filteredArr);
+                domManager.appendTodoInAll(sortArr);
+            
+                case "all":
+                
+                const sortArr2 = Todo.sortArrayInAll(Todo.array);
+                domManager.wipe();
+                domManager.appendTodoInAll(sortArr2);
+                break;
+
+            case "thisWeek":
+               
+
+                const sortArr4 = Todo.filterArrayInWeek(Todo.array);
+                domManager.wipe();
+                domManager.appendTodoInAll(sortArr4);
+                break;
+
+            case "general":
+                
+                const filteredArr3 = Todo.filterArrayForProj(Todo.array,"general");
+                const sortArr3 = Todo.sortArrayInAll(filteredArr3);
+                domManager.wipe();
+                domManager.appendTodoInAll(sortArr3);
+                break;
+
+            default: 
+                const filteredArr5 = Todo.filterArrayForProj(Todo.array,tab);
+                const sortArr5 = Todo.sortArrayInAll(filteredArr5);
+                domManager.wipe();
+                domManager.appendTodoInAll(sortArr5);
+                break;
+        }
+    };
+
     const switchMainTab = function(tab) {
         switch (tab) {
             case "today":
@@ -206,7 +245,7 @@ const uiManager = (function() {
     }
 
 
-    return {currentTab,switchMainTab};
+    return {filterAndSort, currentTab,switchMainTab};
 })();
 
 const todoManager = (function() {
@@ -252,9 +291,9 @@ const todoManager = (function() {
     
         const appendEditBtn = document.querySelector(".edit");
         appendEditBtn.addEventListener("click", () => {   
-            console.log(currentTodoBeingEdited);
+            console.log(currentTodoBeingEdited.unique);
             const todoEl = document.querySelector(`[data-unique='${currentTodoBeingEdited.unique}']`);
-            console.log(todoEl);
+          
             const form = document.querySelector("#formEdit"); 
             if (form.checkValidity()) {
                 currentTodoBeingEdited.title = editTitle.value;
@@ -263,19 +302,29 @@ const todoManager = (function() {
                 currentTodoBeingEdited.dueTime = editDueTime.value;
                 currentTodoBeingEdited.project = editProjSelect.value;
                 currentTodoBeingEdited.priority = priorityInfo;
+  
+          
                 domManager.stylePriority(todoEl);
                 editDia.close();
 
                 const editedTodo = domManager.editTodo(currentTodoBeingEdited.unique,currentTodoBeingEdited);
                 console.log(editedTodo);
 
-                let sortArr;
-                if (currentTab === "all") {
-                    sortArr = Todo.sortArrayInAll(Todo.array);
-                } else if (currentTab === "today") {
-                    sortArr = Todo.sortArrayInAll(Todo.filterArrayinToday(Todo.array));
+                let selectedTab = document.querySelector(".selected");
+                console.log(selectedTab);
+                if (selectedTab.getAttribute("id")) {
+                    console.log(selectedTab.getAttribute("id"));
+                    setTimeout(() => {uiManager.switchMainTab(selectedTab.getAttribute("id"))}, 100);
+                } else {
+                    console.log(selectedTab.getAttribute("data-project)"));
+                    setTimeout(()=> {uiManager.switchMainTab(selectedTab.getAttribute("data-project"))},100);
                 }
-                domManager.appendTodoInAll(sortArr);
+                // if (currentTab === "all") {
+                //     sortArr = Todo.sortArrayInAll(Todo.array);
+                // } else if (currentTab === "today") {
+                //     sortArr = Todo.sortArrayInAll(Todo.filterArrayinToday(Todo.array));
+                // }
+                // domManager.appendTodoInAll(sortArr);
             } else {
                 form.reportValidity();
             }

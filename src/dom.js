@@ -155,6 +155,7 @@ const domManager = (function() {
     }
 
     const stylePriority = function(todoEl) {
+  
         switch (todoEl.getAttribute("data-priority")) {
             case "Trivial":
                 if (!todoEl.classList.contains("trivial")) {
