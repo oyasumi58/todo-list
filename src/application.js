@@ -85,13 +85,21 @@ function giveBtnsEvent() {
             //     console.log(e.target);
             //     domManager.fillModal(e.target);
             // });
-            let sortArr;
-            if (currentTab === "all") {
-                sortArr = Todo.sortArrayInAll(Todo.array);
-            } else if (currentTab === "today") {
-                sortArr = Todo.sortArrayInAll(Todo.filterArrayinToday(Todo.array));
+            // let sortArr;
+            // if (currentTab === "all") {
+            //     sortArr = Todo.sortArrayInAll(Todo.array);
+            // } else if (currentTab === "today") {
+            //     sortArr = Todo.sortArrayInAll(Todo.filterArrayinToday(Todo.array));
+            // }
+            let selectedTab = document.querySelector(".selected");
+            if (selectedTab.getAttribute("id")) {
+                console.log(selectedTab.getAttribute("id"));
+                setTimeout(() => {uiManager.switchMainTab(selectedTab.getAttribute("id"))}, 100);
+            } else {
+                console.log(selectedTab.getAttribute("data-project)"));
+                setTimeout(()=> {uiManager.switchMainTab(selectedTab.getAttribute("data-project"))},100);
             }
-            domManager.appendTodoInAll(sortArr);
+            //domManager.appendTodoInAll(sortArr);
         } else {
             form.reportValidity();
         }
@@ -398,11 +406,11 @@ const todoManager = (function() {
                 todo.classList.remove("complete");
                 todoObj.complete = false;
                 if (tab.getAttribute("id") !== null) {
-                    uiManager.switchMainTab(tab.getAttribute("id"));
+                    setTimeout(() => {uiManager.switchMainTab(tab.getAttribute("id"))},100);
                     //fails in this week and general
                     //when it switches it doesnt get the checkmar???
                 } else {
-                    uiManager.switchMainTab(tab.getAttribute("data-project"));
+                    setTimeout(() => {uiManager.switchMainTab(tab.getAttribute("data-project"))},100);
                 }
             }
         })
