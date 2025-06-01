@@ -172,7 +172,7 @@ body {
 #scrollContainer {
     width: 70%;
     height: calc(100vh - 15px - 15px - 1.5rem - 2 * var(--block-padding));
-    
+    /* padding-bottom: 0.5px; */
     overflow-y: auto;
     gap: 15px;
 }
@@ -292,7 +292,9 @@ input[type=checkbox] {
   transform: rotate(45deg);
 }
 
-
+.complete {
+    opacity: 0.6 !important;
+}
 
 
 footer {

@@ -79,6 +79,7 @@ function giveBtnsEvent() {
 
             setTimeout(() => {refreshModule()},10); //to avoid dumb error
             let todoEl = new TodoElement(todo);
+            todoManager.addCheckMarkEvent(todoEl);
             // todoEl.addEventListener("click",(e) => {
             //     editDia.showModal();
             //     console.log(e.target);
@@ -218,7 +219,8 @@ const uiManager = (function() {
                 currentTab = "thisWeek";
                 domManager.dispSelectedTab("thisWeek");
 
-                const sortArr4 = Todo.filterArrayInWeek(Todo.array);
+                const filteredArr4 = Todo.filterArrayInWeek(Todo.array);
+                const sortArr4 = Todo.sortArrayInAll(filteredArr4);
                 domManager.wipe();
                 domManager.appendTodoInAll(sortArr4);
                 break;
@@ -364,7 +366,49 @@ const todoManager = (function() {
         })
     }
 
-    return {addEditEvent, addDeleteEvent};
+    function addCheckMarkEvent(todoEl) {
+        const checkmark = todoEl.querySelector(`[type="checkbox"]`);
+        console.log(checkmark.checked);
+        checkmark.addEventListener("change", (e) => {
+            console.log(checkmark.checked);
+            e.preventDefault();
+            let todo = e.target.parentElement.parentElement.parentElement;
+            let todoObj;
+            Todo.array.forEach((obj) => {
+                if (obj.unique === todo.getAttribute("data-unique")) {
+                    todoObj = obj;
+                    console.log(todoObj);
+                    return;
+                }
+            })
+            const tab = document.querySelector(".selected");
+            console.log(tab);
+            if (checkmark.checked === true) {
+                console.log(todo);
+                if (!todo.classList.contains("complete")) {
+                    todo.classList.add("complete");
+                    todoObj.complete = true;
+                    if (tab.getAttribute("id") !== null) {
+                        uiManager.switchMainTab(tab.getAttribute("id"));
+                    } else {
+                        uiManager.switchMainTab(tab.getAttribute("data-project"));
+                    }
+                }
+            } else {
+                todo.classList.remove("complete");
+                todoObj.complete = false;
+                if (tab.getAttribute("id") !== null) {
+                    uiManager.switchMainTab(tab.getAttribute("id"));
+                    //fails in this week and general
+                    //when it switches it doesnt get the checkmar???
+                } else {
+                    uiManager.switchMainTab(tab.getAttribute("data-project"));
+                }
+            }
+        })
+    }
+
+    return {addCheckMarkEvent, addEditEvent, addDeleteEvent};
 })();
 
 const catEditBtn = catEl.querySelector(".editBtn");
