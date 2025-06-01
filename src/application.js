@@ -269,7 +269,9 @@ const uiManager = (function() {
                 const filteredArr5 = Todo.filterArrayForProj(Todo.array,tab);
                 const sortArr5 = Todo.sortArrayInAll(filteredArr5);
                 domManager.wipe();
-                domManager.appendTodoInAll(sortArr5);
+                domManager.appendTodoInAll(sortArr5,tab);
+                const delBtn = document.querySelector(".projDelBtn");
+                projectManager.deleteButton(delBtn);
                 break;
         }
     }
@@ -657,7 +659,33 @@ const projectManager = (function() {
         return error;
     }
 
-    return { makeProject, getError };
+    function deleteButton(delBtn) {
+        delBtn.addEventListener("click",() => {
+            if (confirm("Delete project and all its contents?")) {
+                const sidebar = document.querySelector("#sidebar");
+                const currentTab = sidebar.querySelector(".selected");
+                const tabValue = currentTab.getAttribute("data-project");
+                Project.array.forEach((projectObj) => {
+                    if (projectObj.title === tabValue) {                                
+                        Project.removeProject(projectObj);
+                    }
+                });
+
+                Todo.array.forEach((todoObj) => {
+                    if (todoObj.project === tabValue) {
+                        console.log("hi");
+                        Todo.removeTodo(todoObj);
+                    }
+                });
+
+                uiManager.switchMainTab("all");
+
+                currentTab.remove();
+            }
+        })
+    }
+
+    return { deleteButton, makeProject, getError };
 })();
 
 const createProjBtn = document.querySelector("#createProjBtn");

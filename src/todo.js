@@ -17,6 +17,12 @@ class Todo {
         Todo.array.push(this);
     }   
 
+    static removeTodo = function(todo) {
+        Todo.array.splice(Todo.array.indexOf(todo));
+        console.log(Todo.array);
+        return Todo.array;
+    }
+
     static sortArrayInAll = function(arr) {
         console.log(arr);
         if (arr === undefined) {console.log("failed"); return}

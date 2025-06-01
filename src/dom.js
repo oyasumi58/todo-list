@@ -114,9 +114,10 @@ class TodoElement {
 
 
 const domManager = (function() {
-    const appendTodoInAll = function(sortArr) {
+    const appendTodoInAll = function(sortArr,tab) {
         if (sortArr === undefined) {console.log("failed"); return}
         wipe();
+        appendDelBtn(tab);
         let sortedArray = [];
          sortArr.forEach((todo) => { //in order of todo obj
             TodoElement.dispArray.forEach((todoEl) => {
@@ -148,11 +149,11 @@ const domManager = (function() {
             prevSelTab.classList.remove("selected"); 
         }
         let selTab;
-        if (document.querySelector(`#${tab}`) !== null) {
-            selTab = document.querySelector(`#${tab}`);
-        } else {
+        if (document.querySelector(`[data-project="${tab}"]`) !== null) {
             selTab = document.querySelector(`[data-project="${tab}"]`);
-        }
+        } else {
+            selTab = document.querySelector(`#${tab}`);
+        } // very risky code
 
         console.log(selTab);
         selTab.classList.add("selected");
@@ -292,8 +293,25 @@ const domManager = (function() {
         // flexCon.appendChild(deleteBtn);
     }
 
+    const appendDelBtn = function(tab) {
+        console.log(tab);
+        if (tab === undefined) {
+                if (document.querySelector(".projDelBtn") !== null) {
+                    const delBtn = document.querySelector(".projDelBtn");
+                    delBtn.remove();
+                }
+            return;
+        } else {
+            const delBtn = document.createElement("button");
+            delBtn.setAttribute("type","button");
+            delBtn.setAttribute("class","projDelBtn");
+            delBtn.textContent = "Delete Project";
+            const main = document.querySelector("#main");
+            main.appendChild(delBtn);
+        }
+    }
 
-    return { removeOption, appendProjOptions, createProjectEl, editTodo, appendTodoInAll, wipe, dispSelectedTab, stylePriority, };
+    return { appendDelBtn, removeOption, appendProjOptions, createProjectEl, editTodo, appendTodoInAll, wipe, dispSelectedTab, stylePriority, };
 })();
 
 const catEl = new TodoElement(cat);
