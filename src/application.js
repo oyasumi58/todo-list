@@ -75,6 +75,7 @@ function giveBtnsEvent() {
         if (form.checkValidity()) {
             let titleInfo = titleInput.value;
             let descInfo = descInput.value;
+            // console.log(descInfo);
             let dateInfo = dateInput.value;
             let timeInfo = timeInput.value;
             let projectInfo = projInput.value;

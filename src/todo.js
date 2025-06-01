@@ -1,6 +1,6 @@
 import { formatManager, c } from "./date.js"
 export { formatManager, c } 
-console.log("todos check");
+console.log("todso check");
 
 class Todo {
     static array = [];
