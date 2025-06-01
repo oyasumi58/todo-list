@@ -113,9 +113,10 @@ function weekFilter(arr) {
 }
 
 function projFilter(elem,projName) {
+    console.log(elem);
     console.log(elem.project.toLowerCase());
     console.log(projName);
-    return elem.project.toLowerCase() === projName;
+    return elem.project.toLowerCase() === projName.toLowerCase();
 }
 
 class Project {

@@ -41,7 +41,7 @@ function giveBtnsEvent() {
 
     //priority buttons
     const priorityBtns = document.querySelectorAll(".priorityBtn");
-    // let priorityInfo = "Trivial";
+    //priorityInfo = "Trivial";
     dialog.addEventListener("open",() => {
         refreshModule();
     });
@@ -308,10 +308,16 @@ const todoManager = (function() {
             dueDate.value = today;
             const projSelect = document.querySelector("#projSelect");
             projSelect.value = "General";
+            const createDia = document.querySelector("#createDia");
+            const timeInput = createDia.querySelector("#dueTime");
+            timeInput.style.visibility = "visible";
         } else if (tab === "all") {
             dueDate.value = "";
             const projSelect = document.querySelector("#projSelect");
             projSelect.value = "General";
+            const createDia = document.querySelector("#createDia");
+            const timeInput = createDia.querySelector("#dueTime");
+            timeInput.style.visibility = "hidden";
         } else { //proj tab
             console.log(tab);
             dueDate.value = "";
@@ -319,6 +325,9 @@ const todoManager = (function() {
             const selOption = projSelect.querySelector(`[value="${tab}"]`);
             console.log(selOption);
             projSelect.value = selOption.value;
+            const createDia = document.querySelector("#createDia");
+            const timeInput = createDia.querySelector("#dueTime");
+            timeInput.style.visibility = "hidden";
         }
     }
 
@@ -515,7 +524,10 @@ editDia.addEventListener("close", () => {
 })
 
 const projectManager = (function() {
-    function makeProject(newProjTab,e) {
+    let edited = false;
+    function makeProject(newProjTab,prevProjValue,e) {
+        
+     
         if (newProjTab.isConnected) {
                 if (e) {
                     e.preventDefault();
@@ -535,6 +547,24 @@ const projectManager = (function() {
                     const projTab = Project.createProject(newProjTab.value,Project.array);
                     domManager.appendProjOptions("createDia",projTab.getAttribute("data-project"));
                     domManager.appendProjOptions("editDia",projTab.getAttribute("data-project"));
+                    if (edited === true) {
+                        console.log("hi");
+                        const tab = projTab;
+                        setTimeout(() => {uiManager.switchMainTab(tab.getAttribute("data-project"))},100);
+
+                        Todo.array.forEach((todoObj) => {
+                                if (todoObj.project === prevProjValue) {
+                                    todoObj.project = projTab.getAttribute("data-project");
+                                    console.log(projTab);
+                                    const todoEl = document.querySelector(`[data-todo-project="${prevProjValue}"]`);
+                                    const projInput = todoEl.querySelector(".todoProj");
+                                    projInput.textContent = todoObj.project;
+                                }
+                            });
+
+                        edited = false;
+                    }
+
                     console.log(projTab);
                     projTab.addEventListener("click", () => {
                         if (currentTab === projTab.getAttribute("data-project")) {
@@ -543,7 +573,49 @@ const projectManager = (function() {
                         // console.log("Hi");
                         uiManager.switchMainTab(`${projTab.getAttribute("data-project")}`);
                         //c//onsole.log(currentTab);
-                    })
+                    })    
+                    projTab.addEventListener("dblclick", (e) => {
+                        console.log(e.target);
+                        let editProj = domManager.createProjectEl();
+                        editProj.removeAttribute("placeholder");
+                        console.log(projTab.textContent);
+                        editProj.value = projTab.textContent;
+                        const prevProjValue = projTab.getAttribute("data-project");
+                        projTab.remove();
+                        domManager.removeOption("editDia",projTab.getAttribute("data-project"));
+                        domManager.removeOption("createDia",projTab.getAttribute("data-project"));
+                        Project.array.forEach((projectObj) => {
+                            console.log(projectObj);
+                            console.log(editProj.value);
+                            if (projectObj.title === editProj.value) {
+                                console.log(projectObj);
+                                Project.array.splice(Project.array.indexOf(projectObj),1);
+                            }
+                        });
+
+                        let enterPressed = false;
+                        editProj.onblur = function() {
+                            if (enterPressed) {
+                                enterPressed = false;
+                                return;
+                            }
+                            console.log(enterPressed);
+                            edited = true;
+                            projectManager.makeProject(editProj,prevProjValue);
+                        }; 
+                        editProj.addEventListener("keydown", (e) => {
+                            if (e.key !== 'Enter') {
+                                return;
+                            }
+
+
+                            enterPressed = true;
+                            console.log(newProjTab.value);
+                            edited = true;
+                            projectManager.makeProject(editProj,prevProjValue,e);
+                 
+                        })
+                     })
 
 
                     if (newProjTab.isConnected) {
@@ -555,7 +627,6 @@ const projectManager = (function() {
 
             }
     }
-
 
     return { makeProject };
 })();

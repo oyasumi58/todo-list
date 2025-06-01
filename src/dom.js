@@ -15,10 +15,11 @@ class TodoElement {
     constructor(todo) {
         const todoElem = document.createElement("div");
         todoElem.setAttribute("class","todo");
-        todoElem.setAttribute("name","done");
+        //todoElem.setAttribute("name","done");
         todoElem.setAttribute("data-unique",`${todo.unique}`);
         todoElem.setAttribute("data-priority",`${todo.priority}`);
-        
+        todoElem.setAttribute("data-todo-project",`${todo.project}`);
+
         domManager.stylePriority(todoElem);
 
         const row1 = document.createElement("div");
@@ -141,8 +142,11 @@ const domManager = (function() {
     }
 
     const dispSelectedTab = function(tab) {
-        const prevSelTab = document.querySelector(".selected");
-        prevSelTab.classList.remove("selected");
+        const sidebar = document.querySelector("#sidebar");
+        if (sidebar.querySelector(".selected") !== null) {
+           const prevSelTab = sidebar.querySelector(".selected");
+            prevSelTab.classList.remove("selected"); 
+        }
         let selTab;
         if (document.querySelector(`#${tab}`) !== null) {
             selTab = document.querySelector(`#${tab}`);
@@ -205,6 +209,14 @@ const domManager = (function() {
         projOption.setAttribute("value",`${projTitle}`);
         projOption.textContent = projTitle;
         select.appendChild(projOption);
+    }
+
+    const removeOption = function(dialogID,projTitle) {
+        const dia = document.querySelector(`#${dialogID}`);
+        const select = dia.querySelector("select");
+
+        const projOption = select.querySelector(`[value="${projTitle}"]`);
+        select.removeChild(projOption);
     }
 
     const editTodo = function(unique,todoObj) {
@@ -281,7 +293,7 @@ const domManager = (function() {
     }
 
 
-    return { appendProjOptions, createProjectEl, editTodo, appendTodoInAll, wipe, dispSelectedTab, stylePriority, };
+    return { removeOption, appendProjOptions, createProjectEl, editTodo, appendTodoInAll, wipe, dispSelectedTab, stylePriority, };
 })();
 
 const catEl = new TodoElement(cat);
