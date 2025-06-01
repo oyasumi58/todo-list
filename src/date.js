@@ -53,6 +53,12 @@ const formatManager = (function() {
         return today;
     }
 
+    const formatForDateInput = function() {
+        const rawToday = endOfToday();
+        const today = format(rawToday, "yyyy-MM-dd")
+        return today;
+    }
+
     const getWeek = function() {
         const today = endOfToday();
         let monday, sunday;
@@ -77,7 +83,7 @@ const formatManager = (function() {
         return week;
     }
 
-    return {formatDateYWOISO,  getWeek, formatDateAndTime, formatDate, formatDateY, formatToday};
+    return {formatForDateInput, formatDateYWOISO,  getWeek, formatDateAndTime, formatDate, formatDateY, formatToday};
 })();
 
 formatManager.formatDate("2025-05-16 12:37");

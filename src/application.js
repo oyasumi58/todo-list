@@ -1,5 +1,6 @@
 // import { format, parseISO } from "date-fns";
-import { Project, catEl, ratEl, Todo, TodoElement, domManager,c, signalAddEvent, emitter } from "./dom.js";
+import { format } from "date-fns";
+import { formatManager, Project, catEl, ratEl, Todo, TodoElement, domManager,c, signalAddEvent, emitter } from "./dom.js";
 
 console.log("appl check");
 let currentTab = "all";
@@ -15,6 +16,12 @@ function giveBtnsEvent() {
     todoBtn.addEventListener("click",() => { 
         if (clickState) {
             dialog.showModal();
+            let selectedTab = document.querySelector(".selected");
+            if (selectedTab.getAttribute("id")) {
+                todoManager.autoFillInfo(selectedTab.getAttribute("id")); 
+            } else {
+                todoManager.autoFillInfo(selectedTab.getAttribute("data-project")); 
+            }
         }
     })
 
@@ -110,7 +117,7 @@ function giveBtnsEvent() {
     const todayTab = document.querySelector("#today");
     const allTab = document.querySelector("#all");
     const thisWeekTab = document.querySelector("#thisWeek");
-    const generalTab = document.querySelector(`[data-project="general"]`);
+    const generalTab = document.querySelector(`[data-project="General"]`);
     console.log(todayTab)
     todayTab.addEventListener("click", () => {
         if (currentTab === "today") {
@@ -127,10 +134,10 @@ function giveBtnsEvent() {
         //c//onsole.log(currentTab);
     });
     generalTab.addEventListener("click", () => {
-        if (currentTab === "general") {
+        if (currentTab === "General") {
             return;
         }
-        uiManager.switchMainTab("general");
+        uiManager.switchMainTab("General");
         //c//onsole.log(currentTab);
     });
     thisWeekTab.addEventListener("click", () => {
@@ -186,9 +193,9 @@ const uiManager = (function() {
                 domManager.appendTodoInAll(sortArr4);
                 break;
 
-            case "general":
+            case "General":
                 
-                const filteredArr3 = Todo.filterArrayForProj(Todo.array,"general");
+                const filteredArr3 = Todo.filterArrayForProj(Todo.array,"General");
                 const sortArr3 = Todo.sortArrayInAll(filteredArr3);
                 domManager.wipe();
                 domManager.appendTodoInAll(sortArr3);
@@ -233,10 +240,10 @@ const uiManager = (function() {
                 domManager.appendTodoInAll(sortArr4);
                 break;
 
-            case "general":
-                currentTab = "general";
-                domManager.dispSelectedTab("general");
-                const filteredArr3 = Todo.filterArrayForProj(Todo.array,"general");
+            case "General":
+                currentTab = "General";
+                domManager.dispSelectedTab("General");
+                const filteredArr3 = Todo.filterArrayForProj(Todo.array,"General");
                 const sortArr3 = Todo.sortArrayInAll(filteredArr3);
                 domManager.wipe();
                 domManager.appendTodoInAll(sortArr3);
@@ -260,6 +267,30 @@ const uiManager = (function() {
 
 const todoManager = (function() {
     let currentTodoBeingEdited = null;
+
+
+    function autoFillInfo(tab) {
+        const createDia = document.querySelector("#createDia");
+        const dueDate = createDia.querySelector("#dueDate");
+        if (tab === "today" || tab === "thisWeek") {
+            const today = formatManager.formatForDateInput();
+            console.log(today);
+            dueDate.value = today;
+            const projSelect = document.querySelector("#projSelect");
+            projSelect.value = "General";
+        } else if (tab === "all") {
+            dueDate.value = "";
+            const projSelect = document.querySelector("#projSelect");
+            projSelect.value = "General";
+        } else { //proj tab
+            console.log(tab);
+            dueDate.value = "";
+            const projSelect = document.querySelector("#projSelect");
+            const selOption = projSelect.querySelector(`[value="${tab}"]`);
+            console.log(selOption);
+            projSelect.value = selOption.value;
+        }
+    }
 
     function addEditEvent(editBtn,data,todoObj) {editBtn.addEventListener("click", (e)=> {
         const todoEl = e.target.parentElement.parentElement;
@@ -416,7 +447,7 @@ const todoManager = (function() {
         })
     }
 
-    return {addCheckMarkEvent, addEditEvent, addDeleteEvent};
+    return {autoFillInfo, addCheckMarkEvent, addEditEvent, addDeleteEvent};
 })();
 
 const catEditBtn = catEl.querySelector(".editBtn");
@@ -428,6 +459,9 @@ const ratEditBtn = ratEl.querySelector(".editBtn");
 const ratDeleteBtn = ratEl.querySelector(".deleteBtn");
 todoManager.addEditEvent(ratEditBtn);
 todoManager.addDeleteEvent(ratDeleteBtn);
+
+todoManager.addCheckMarkEvent(catEl);
+todoManager.addCheckMarkEvent(ratEl);
 
 emitter.on('actionDone', (editBtn,deleteBtn,data,todoObj) => {
     console.log(deleteBtn);
