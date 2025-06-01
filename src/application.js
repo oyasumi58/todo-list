@@ -525,8 +525,9 @@ editDia.addEventListener("close", () => {
 
 const projectManager = (function() {
     let edited = false;
+    let error = false;
     function makeProject(newProjTab,prevProjValue,e) {
-        
+        error = false;
      
         if (newProjTab.isConnected) {
                 if (e) {
@@ -599,6 +600,10 @@ const projectManager = (function() {
                                 enterPressed = false;
                                 return;
                             }
+
+                            if (projectManager.error === true) {
+                                return;
+                            }
                             console.log(enterPressed);
                             edited = true;
                             projectManager.makeProject(editProj,prevProjValue);
@@ -610,6 +615,9 @@ const projectManager = (function() {
 
 
                             enterPressed = true;
+                            if (projectManager.error === true) {
+                              return;
+                            }
                             console.log(newProjTab.value);
                             edited = true;
                             projectManager.makeProject(editProj,prevProjValue,e);
@@ -622,18 +630,28 @@ const projectManager = (function() {
                         newProjTab.remove();  
                     }
         } else {
+            error = true;
+            console.log(getError());
             alert("Project name must only contain numbers and letters");
         }
 
             }
     }
 
-    return { makeProject };
+    function getError() {
+        return error;
+    }
+
+    return { makeProject, getError };
 })();
 
 const createProjBtn = document.querySelector("#createProjBtn");
 
 createProjBtn.addEventListener("click", () => {
+    if (projectManager.getError() === true) {
+        alert("User, please fix your error before proceeding");
+        return;
+    }
     const newProjTab = domManager.createProjectEl();
 
     let enterPressed = false;
@@ -642,8 +660,7 @@ createProjBtn.addEventListener("click", () => {
         if (enterPressed) {
             enterPressed = false;
             return;
-        }
-
+        }        
         projectManager.makeProject(newProjTab);
     }; 
 
@@ -651,7 +668,6 @@ createProjBtn.addEventListener("click", () => {
         if (e.key !== 'Enter') {
             return;
         }
-
         enterPressed = true;
         console.log(newProjTab.value);
         projectManager.makeProject(newProjTab,e);
