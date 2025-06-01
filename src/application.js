@@ -39,7 +39,6 @@ function giveBtnsEvent() {
         }
     })
 
-
     //priority buttons
     const priorityBtns = document.querySelectorAll(".priorityBtn");
     // let priorityInfo = "Trivial";
@@ -67,7 +66,8 @@ function giveBtnsEvent() {
     const dateInput = document.querySelector("#dueDate");
     const timeInput = document.querySelector("#dueTime");
     const projInput = document.querySelector("#projSelect");
-
+    
+    timeInput.style.visibility = "hidden";
     //to actually create todo:
     const createBtn = document.querySelector(".submit");
     createBtn.addEventListener("click",() => {
@@ -112,6 +112,19 @@ function giveBtnsEvent() {
         }
         
     })
+    
+    //to make timeInput not exist
+    dateInput.addEventListener('input', (e) => {
+        const inputValue = dateInput.value.trim();
+
+        if (inputValue === "") {
+            console.log("hullo");
+            timeInput.style.visibility = "hidden";
+            timeInput.value = "";
+        } else {
+            timeInput.style.visibility = "visible";
+        };
+    });
 
     //ui tab button events:
     const todayTab = document.querySelector("#today");
@@ -268,6 +281,23 @@ const uiManager = (function() {
 const todoManager = (function() {
     let currentTodoBeingEdited = null;
 
+    //edit stuff that show only occur once:
+    const editDueDate = document.querySelector("#editDueDate");
+    const editDueTime = document.querySelector("#editDueTime");
+    editDueTime.style.visibility = "hidden";
+    editDueDate.addEventListener('input', () => {
+        const inputValue = editDueDate.value.trim();
+        if (inputValue === "") {
+            console.log(inputValue);
+            console.log("hullo");
+            editDueTime.style.visibility = "hidden";
+            editDueTime.value = "";
+        } else {
+            editDueTime.style.visibility = "visible";
+        };
+    });
+
+
 
     function autoFillInfo(tab) {
         const createDia = document.querySelector("#createDia");
@@ -316,6 +346,8 @@ const todoManager = (function() {
         const editProjSelect = document.querySelector("#editProjSelect");
         editProjSelect.value = currentTodoBeingEdited.project;
         
+
+
         const buttons = document.querySelectorAll(".priorityBtn");
         buttons.forEach((button) => {
             if (button.classList.contains("selected")) {
