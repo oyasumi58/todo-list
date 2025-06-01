@@ -538,11 +538,12 @@ const projectManager = (function() {
                 if (newProjTab.value.length >= 1 && newProjTab.value.length <= 20 && testString(newProjTab.value)) {
                     let projSame = false;
                     Project.array.forEach((proj) => {
-                    if (newProjTab.value === proj.title) {
-                        alert("Projects cannot have the same name"); 
-                        projSame = true;
-                    }
+                        if (newProjTab.value === proj.title) {
+                            alert("Projects cannot have the same name"); 
+                            projSame = true;
+                        }
                     })
+                if (newProjTab.value === "General") {alert("Projects cannot have the same name"); projSame = true};
                     if (projSame) {return};
 
                     const projTab = Project.createProject(newProjTab.value,Project.array);
@@ -553,16 +554,27 @@ const projectManager = (function() {
                         const tab = projTab;
                         setTimeout(() => {uiManager.switchMainTab(tab.getAttribute("data-project"))},100);
 
+                        
+                                    
+                        let currentProj = projTab.getAttribute("data-project");
                         Todo.array.forEach((todoObj) => {
                                 if (todoObj.project === prevProjValue) {
-                                    todoObj.project = projTab.getAttribute("data-project");
-                                    console.log(projTab);
-                                    const todoEl = document.querySelector(`[data-todo-project="${prevProjValue}"]`);
-                                    const projInput = todoEl.querySelector(".todoProj");
-                                    projInput.textContent = todoObj.project;
+                                    todoObj.project = currentProj;
                                 }
                             });
 
+                        const todoEls = Array.from(document.querySelectorAll(`[data-todo-project="${prevProjValue}"]`));
+                        todoEls.forEach((todoEl) => {
+                            const projInput = todoEl.querySelector(".todoProj");
+                            setTimeout(()=>{
+                                    projInput.textContent = currentProj; 
+                                    console.log(projInput);
+                                    todoEl.setAttribute("data-todo-project",currentProj);
+                                },100);
+                        })
+                        
+
+                        
                         edited = false;
                     }
 
@@ -581,16 +593,19 @@ const projectManager = (function() {
                         editProj.removeAttribute("placeholder");
                         console.log(projTab.textContent);
                         editProj.value = projTab.textContent;
+                        
                         const prevProjValue = projTab.getAttribute("data-project");
+                        
                         projTab.remove();
                         domManager.removeOption("editDia",projTab.getAttribute("data-project"));
                         domManager.removeOption("createDia",projTab.getAttribute("data-project"));
+                        
                         Project.array.forEach((projectObj) => {
                             console.log(projectObj);
                             console.log(editProj.value);
-                            if (projectObj.title === editProj.value) {
+                            if (projectObj.title === prevProjValue) {
                                 console.log(projectObj);
-                                Project.array.splice(Project.array.indexOf(projectObj),1);
+                                Project.removeProject(projectObj);
                             }
                         });
 
@@ -670,7 +685,7 @@ createProjBtn.addEventListener("click", () => {
         }
         enterPressed = true;
         console.log(newProjTab.value);
-        projectManager.makeProject(newProjTab,e);
+        projectManager.makeProject(newProjTab,null,e);
         
     })
     // thisWeekTab.addEventListener("click", () => {

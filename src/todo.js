@@ -143,6 +143,12 @@ class Project {
         console.log(array);
         return projTab;
     }
+
+    static removeProject = function(project) {
+        Project.array.splice(Project.array.indexOf(project));
+        console.log(Project.array);
+        return Project.array;
+    }
 }
 
 export { Project, Todo, cat, rat };
