@@ -3,3 +3,6 @@ console.log("fx check");
 import './styles.css';
 // import  './application.js';
 import './application.js';
+
+
+console.log(localStorage);

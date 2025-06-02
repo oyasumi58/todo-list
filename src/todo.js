@@ -125,6 +125,14 @@ function projFilter(elem,projName) {
     return elem.project.toLowerCase() === projName.toLowerCase();
 }
 
+function update() {
+    const todoArr = JSON.stringify(Todo.array);
+    const projArr = JSON.stringify(Project.array);
+    localStorage.setItem("todos",todoArr);
+    localStorage.setItem("projects",projArr);
+    console.log(localStorage);
+}
+
 class Project {
     static array = [];
 
@@ -157,4 +165,4 @@ class Project {
     }
 }
 
-export { Project, Todo, cat, rat };
+export { update, Project, Todo, cat, rat };

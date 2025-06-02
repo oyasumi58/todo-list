@@ -1,6 +1,6 @@
 // import { format, parseISO } from "date-fns";
 import { format } from "date-fns";
-import { formatManager, Project, catEl, ratEl, Todo, TodoElement, domManager,c, signalAddEvent, emitter } from "./dom.js";
+import { update, formatManager, Project, catEl, ratEl, Todo, TodoElement, domManager,c, signalAddEvent, emitter } from "./dom.js";
 
 console.log("appl check");
 let currentTab = "all";
@@ -26,13 +26,13 @@ function giveBtnsEvent() {
     })
 
     //close dialog with background
-    dialog.addEventListener("click", (e) => {
+    dialog.addEventListener("mousedown", (e) => {
         if (e.target === dialog) { //dialog element is the bg, rest is children
             dialog.close();
             e.stopPropagation(); //to prevent it from bubbling to dialog if clicked on child
         }
     })
-    editDia.addEventListener("click", (e) => {
+    editDia.addEventListener("mousedown", (e) => {
         if (e.target === editDia) { //dialog element is the bg, rest is children
             editDia.close();
             e.stopPropagation(); //to prevent it from bubbling to dialog if clicked on child
@@ -66,7 +66,6 @@ function giveBtnsEvent() {
     const dateInput = document.querySelector("#dueDate");
     const timeInput = document.querySelector("#dueTime");
     const projInput = document.querySelector("#projSelect");
-    
     timeInput.style.visibility = "hidden";
     //to actually create todo:
     const createBtn = document.querySelector(".submit");
@@ -734,3 +733,13 @@ function testString(str) {
     return /^[a-zA-Z0-9\s]+$/.test(str);
 }
 
+window.addEventListener('beforeunload',(e) => {
+    update();
+});
+
+// window.addEventListener('load', function() {
+//   Todo.array = JSON.parse(localStorage.getItem("todos"));
+//   Project.array = JSON.parse(localStorage.getItem("projects"));
+//   console.log(Todo.array);
+//   console.log(Project.array);
+// }); //google how to turn stringied array into array

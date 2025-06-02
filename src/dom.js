@@ -1,5 +1,5 @@
-import { Project, cat,rat,Todo, formatManager,c } from './todo.js';
-export { Project, Todo, formatManager,c } 
+import { update, Project, cat,rat,Todo, formatManager,c } from './todo.js';
+export { update, Project, Todo, formatManager,c } 
 import editImg from "./asset/square-edit-outline.svg";
 import { EventEmitter } from 'events';
 const emitter = new EventEmitter();
