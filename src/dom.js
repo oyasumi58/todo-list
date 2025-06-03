@@ -82,8 +82,7 @@ class TodoElement {
             formattedDate = formatManager.formatDate(rawDate)
         }
         
-        dateGrp.textContent = formattedDate;
-
+        if (formattedDate !== undefined) { dateGrp.textContent = `By `+ formattedDate;}
         
         flexCon.appendChild(dateGrp);
 
@@ -286,7 +285,8 @@ const domManager = (function() {
             rawDate = `${todoObj.dueDate}`;
             formattedDate = formatManager.formatDate(rawDate)
         }
-        dateGrp.textContent = formattedDate;
+        if (formattedDate !== undefined) { dateGrp.textContent = `By `+ formattedDate;}
+
         
         // flexCon.appendChild(dateGrp);
         // const deleteBtn = document.createElement("button");

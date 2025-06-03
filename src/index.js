@@ -152,19 +152,16 @@ function onload() {
 			todoManager.addCheckMarkEvent(domEl);
 		});
 	}
-
-	// console.log(Todo.array);
-	// console.log(Project.array);	
-	if (confirm("clear?")) {
-		localStorage.clear();
-		Todo.array = [];
-		Project.array = [];
-		console.log(Todo.array);
-		console.log(localStorage);
-		domManager.wipe();
-		makeTemplate();
-		onload();
-	}
+	// if (confirm("clear?")) {
+	// 	localStorage.clear();
+	// 	Todo.array = [];
+	// 	Project.array = [];
+	// 	console.log(Todo.array);
+	// 	console.log(localStorage);
+	// 	domManager.wipe();
+	// 	makeTemplate();
+	// 	onload();
+	// }
 }
 
 window.addEventListener('load', () => {

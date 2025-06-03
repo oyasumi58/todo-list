@@ -231,9 +231,9 @@ body {
     width: 220px;
 }
 
-.todoDateGrp::before {
+/* .todoDateGrp::before {
     content: "By: "
-}
+} */
 
 .editBtn {
     width: 25px;
@@ -360,6 +360,7 @@ textarea {
     display: block;
     font-family: "Roboto","Arial";
     font-size: 1.2rem;
+    resize: none;
 }
 
 input:hover {
