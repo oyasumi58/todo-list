@@ -4,7 +4,7 @@ import editImg from "./asset/square-edit-outline.svg";
 import { EventEmitter } from 'events';
 const emitter = new EventEmitter();
 
-console.log("dom check");
+// console.log("dom check");
 const main = document.querySelector("#main");
 
 
@@ -90,6 +90,7 @@ class TodoElement {
         const deleteBtn = document.createElement("button");
         deleteBtn.setAttribute("class","deleteBtn");
         deleteBtn.setAttribute("type","button");
+        deleteBtn.setAttribute("data-listener","0");
         deleteBtn.textContent = "🗑️"
         flexCon.appendChild(deleteBtn);
         
@@ -126,7 +127,7 @@ const domManager = (function() {
                     return
                 }
             })
-            console.log(sortedArray);
+            // console.log(sortedArray);
             sortedArray.forEach((sortedTodo) => {
                 main.appendChild(sortedTodo);
             })
@@ -155,7 +156,7 @@ const domManager = (function() {
             selTab = document.querySelector(`#${tab}`);
         } // very risky code
 
-        console.log(selTab);
+        // console.log(selTab);
         selTab.classList.add("selected");
     }
 
@@ -184,7 +185,7 @@ const domManager = (function() {
                 }
                 break;
             default:
-                console.log(todoEl.getAttribute("data-priority"));
+                // console.log(todoEl.getAttribute("data-priority"));
                 break;
         }
     }
@@ -222,7 +223,7 @@ const domManager = (function() {
 
     const editTodo = function(unique,todoObj) {
         const todoEl = document.querySelector(`[data-unique="${unique}"]`);
-        console.log(todoObj);
+        // console.log(todoObj);
         
 
         // todoElem.setAttribute("class","todo");
@@ -234,11 +235,11 @@ const domManager = (function() {
 
         const row1 = todoEl.querySelector(".row1");
         // row1.setAttribute("class","row1");
-        console.log(row1);
+        // console.log(row1);
 
         const row2 = todoEl.querySelector(".row2");
         // row2.setAttribute("class","row2");
-        console.log(row2);
+        // console.log(row2);
 
         // todoEl.appendChild(row1);
         // todoEl.appendChild(row2);
@@ -296,7 +297,7 @@ const domManager = (function() {
     }
 
     const appendDelBtn = function(tab) {
-        console.log(tab);
+        // console.log(tab);
         if (tab === undefined) {
                 if (document.querySelector(".projDelBtn") !== null) {
                     const delBtn = document.querySelector(".projDelBtn");

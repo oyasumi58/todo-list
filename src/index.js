@@ -1,17 +1,18 @@
-console.log("fx check");
+// // console.log("fx check");
 //todo has a property for which project it is, and then we arrange it that way.
 import './styles.css';
 // import  './application.js';
 import {projectManager, Todo, Project, update, TodoElement, domManager, todoManager, uiManager} from './application.js';
+import { getEventListeners } from 'events';
 
 
-console.log(localStorage);
+// // console.log(localStorage);
 
 function makeTemplate() {
 	//to initialize cat and rat;
 	let cat;
 	let rat;
-	console.log(Todo.array[0]);
+	// // console.log(Todo.array[0]);
 	if (Todo.array[0] === undefined) {
 		// if (Todo.array[0].title !== "cat") {
 		cat = new Todo("cat","","2025-05-07","17:53",'Trivial',"General");
@@ -39,11 +40,13 @@ function makeTemplate() {
 			const catEditBtn = catEl.querySelector(".editBtn");
 			const catDeleteBtn = catEl.querySelector(".deleteBtn");
 			todoManager.addEditEvent(catEditBtn);
-			todoManager.addDeleteEvent(catDeleteBtn);
+
+				todoManager.addDeleteEvent(catDeleteBtn);
+			
 
 			const ratEditBtn = ratEl.querySelector(".editBtn");
 			const ratDeleteBtn = ratEl.querySelector(".deleteBtn");
-			todoManager.addEditEvent(ratEditBtn);
+			todoManager.addEditEvent(ratEditBtn)
 			todoManager.addDeleteEvent(ratDeleteBtn);
 
 			todoManager.addCheckMarkEvent(catEl);
@@ -51,113 +54,133 @@ function makeTemplate() {
 	}
 }
 
-window.addEventListener('load', () => {
-	console.log(localStorage.getItem("projects"));
+function onload() {
+	// // console.log(localStorage.getItem("projects"));
 	let rawProjArr = JSON.parse(localStorage.getItem("projects"));
-	console.log(rawProjArr);
-	rawProjArr.forEach((proj) => {
-		Project.array.push(proj); // it doesnt need to be classed because im dumb and wrote the Proj class w/o a constructor or any instance methods anyway
-		console.log(Project.array);
-		
-		const testProj = document.querySelector(`[data-project="${proj.title}"]`);
-		if (testProj !== null) {
-			console.log(testProj);
-			return;
-		}
-		const projTab = Project.createProject(proj.title,Project.array);
-		domManager.appendProjOptions("createDia",projTab.getAttribute("data-project"));
-		domManager.appendProjOptions("editDia",projTab.getAttribute("data-project"));
-		projTab.addEventListener("click", () => {
-			let currentTab = document.querySelector(".selected");
-			if (currentTab === projTab.getAttribute("data-project")) {
-					return;
+	// // console.log(rawProjArr);
+	if (rawProjArr !== null) {
+		rawProjArr.forEach((proj) => {
+			Project.array.push(proj); // it doesnt need to be classed because im dumb and wrote the Proj class w/o a constructor or any instance methods anyway
+			// console.log(Project.array);
+			
+			const testProj = document.querySelector(`[data-project="${proj.title}"]`);
+			if (testProj !== null) {
+				// console.log(testProj);
+				return;
 			}
-			uiManager.switchMainTab(`${projTab.getAttribute("data-project")}`); 
-		})
+			const projTab = Project.createProject(proj.title,Project.array);
+			domManager.appendProjOptions("createDia",projTab.getAttribute("data-project"));
+			domManager.appendProjOptions("editDia",projTab.getAttribute("data-project"));
+			projTab.addEventListener("click", () => {
+				let currentTab = document.querySelector(".selected");
+				if (currentTab === projTab.getAttribute("data-project")) {
+						return;
+				}
+				uiManager.switchMainTab(`${projTab.getAttribute("data-project")}`); 
+			})
 
-		projTab.addEventListener("dblclick", (e) => {
-				console.log(e.target);
-				let editProj = domManager.createProjectEl();
-				editProj.removeAttribute("placeholder");
-				console.log(projTab.textContent);
-				editProj.value = projTab.textContent;
-				
-				const prevProjValue = projTab.getAttribute("data-project");
-				
-				projTab.remove();
-				domManager.removeOption("editDia",projTab.getAttribute("data-project"));
-				domManager.removeOption("createDia",projTab.getAttribute("data-project"));
-				
-				Project.array.forEach((projectObj) => {
-						console.log(projectObj);
-						console.log(editProj.value);
-						if (projectObj.title === prevProjValue) {
-								console.log(projectObj);
-								Project.removeProject(projectObj);
-						}
+			projTab.addEventListener("dblclick", (e) => {
+					// console.log(e.target);
+					let editProj = domManager.createProjectEl();
+					editProj.removeAttribute("placeholder");
+					// console.log(projTab.textContent);
+					editProj.value = projTab.textContent;
 					
-				})
+					const prevProjValue = projTab.getAttribute("data-project");
+					
+					projTab.remove();
+					domManager.removeOption("editDia",projTab.getAttribute("data-project"));
+					domManager.removeOption("createDia",projTab.getAttribute("data-project"));
+					
+					Project.array.forEach((projectObj) => {
+							// console.log(projectObj);
+							// console.log(editProj.value);
+							if (projectObj.title === prevProjValue) {
+									// console.log(projectObj);
+									Project.removeProject(projectObj);
+							}
+						
+					})
 
-				let enterPressed = false;
-                        editProj.onblur = function() {
-                            if (enterPressed) {
-                                enterPressed = false;
-                                return;
-                            }
+					let enterPressed = false;
+							editProj.onblur = function() {
+								if (enterPressed) {
+									enterPressed = false;
+									return;
+								}
 
-                            if (projectManager.error === true) {
-                                return;
-                            }
-                            console.log(enterPressed);
-                            projectManager.setEdited(true);
-                            projectManager.makeProject(editProj,prevProjValue);
-                        }; 
-                        editProj.addEventListener("keydown", (e) => {
-                            if (e.key !== 'Enter') {
-                                return;
-                            }
+								if (projectManager.error === true) {
+									return;
+								}
+								// console.log(enterPressed);
+								projectManager.setEdited(true);
+								projectManager.makeProject(editProj,prevProjValue);
+							}; 
+							editProj.addEventListener("keydown", (e) => {
+								if (e.key !== 'Enter') {
+									return;
+								}
 
 
-                            enterPressed = true;
-                            if (projectManager.error === true) {
-                              return;
-                            }
-							projectManager.setEdited(true);
-                            projectManager.makeProject(editProj,prevProjValue,e);
-                        })
+								enterPressed = true;
+								if (projectManager.error === true) {
+								return;
+								}
+								projectManager.setEdited(true);
+								projectManager.makeProject(editProj,prevProjValue,e);
+							})
+			})
 		})
-	})	
+	}
+		
 	let rawTodoArr =  JSON.parse(localStorage.getItem("todos"));
-	console.log(rawTodoArr);
-	rawTodoArr.forEach((obj) => {
-		let classedObj = Object.assign(new Todo(), obj);
-	})
+	// console.log(rawTodoArr);
+	if (rawTodoArr !== null) {
+		rawTodoArr.forEach((obj) => {
+			let classedObj = Object.assign(new Todo(), obj);
+		})
 
-	makeTemplate();
+		makeTemplate();
 
-	rawTodoArr.forEach((obj) => {  
-		let domEl = new TodoElement(obj);
-		domManager.appendTodoInAll(Todo.array);
-		const objEditBtn = domEl.querySelector(".editBtn");
-		const objDeleteBtn = domEl.querySelector(".deleteBtn");
-		todoManager.addEditEvent(objEditBtn);
-		todoManager.addDeleteEvent(objDeleteBtn);
-		todoManager.addCheckMarkEvent(domEl);
-	});
+		rawTodoArr.forEach((obj) => {  
+			let domEl = new TodoElement(obj);
+			domManager.appendTodoInAll(Todo.array);
+			const objEditBtn = domEl.querySelector(".editBtn");
+			const objDeleteBtn = domEl.querySelector(".deleteBtn");
+			todoManager.addEditEvent(objEditBtn);
+			todoManager.addDeleteEvent(objDeleteBtn);
+			todoManager.addCheckMarkEvent(domEl);
+		});
+	}
 
-	
+	// console.log(Todo.array);
+	// console.log(Project.array);	
+	if (confirm("clear?")) {
+		localStorage.clear();
+		Todo.array = [];
+		Project.array = [];
+		console.log(Todo.array);
+		console.log(localStorage);
+		domManager.wipe();
+		makeTemplate();
+		onload();
+	}
+}
 
-	console.log(Todo.array);
-	console.log(Project.array);
-	
+window.addEventListener('load', () => {
+	onload();
 });
-
-
-
 
 window.addEventListener('beforeunload',(e) => {
 		update();
 		Todo.array = [];
 		Project.array = [];
-		console.log("hi");
+		// console.log("hi");
 });
+
+const title = document.querySelector("footer");
+title.addEventListener("click", () => {
+	console.log(Todo.array);
+	console.log(Project.array);
+})
+

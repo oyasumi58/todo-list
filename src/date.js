@@ -10,7 +10,7 @@ const formatManager = (function() {
 
     const formatDate =function(inputDate) {
         if (!inputDate) {
-            console.log(`no input date for ${inputDate}`);
+            // console.log(`no input date for ${inputDate}`);
             return;
         }
         const date = parseISO(inputDate);
@@ -21,7 +21,7 @@ const formatManager = (function() {
 
     const formatDateY =function(inputDate) {
         if (!inputDate) {
-            console.log(`no input date for ${inputDate}`);
+            // console.log(`no input date for ${inputDate}`);
             return;
         }
         
@@ -35,12 +35,12 @@ const formatManager = (function() {
 
     const formatDateYWOISO = function(inputDate) {
         if (!inputDate) {
-            console.log(`no input date for ${inputDate}`);
+            // console.log(`no input date for ${inputDate}`);
             return;
         }
         const date = inputDate;
         const formattedDate = format(date,"y MMM do");
-        console.log(formattedDate);
+        // console.log(formattedDate);
         return formattedDate;
     }
 
@@ -73,8 +73,8 @@ const formatManager = (function() {
             monday = today;
             sunday = nextSunday(today);  
         }
-        console.log(monday);
-        console.log(sunday);
+        // console.log(monday);
+        // console.log(sunday);
         
         const week = eachDayOfInterval({
             start: monday,
@@ -89,7 +89,7 @@ const formatManager = (function() {
 formatManager.formatDate("2025-05-16 12:37");
 
 function c(msg) {
-    console.log(msg);
+    // console.log(msg);
 }
 
 export { formatManager, c };

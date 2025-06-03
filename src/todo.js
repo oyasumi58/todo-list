@@ -1,6 +1,6 @@
 import { formatManager, c } from "./date.js"
 export { formatManager, c } 
-console.log("todo check");
+// console.log("todo check");
 
 class Todo {
     static array = [];
@@ -19,13 +19,13 @@ class Todo {
 
     static removeTodo = function(todo) {
         Todo.array.splice(Todo.array.indexOf(todo));
-        console.log(Todo.array);
+        // console.log(Todo.array);
         return Todo.array;
     }
 
     static sortArrayInAll = function(arr) {
-        console.log(arr);
-        if (arr === undefined) {console.log("failed"); return}
+        // console.log(arr);
+        // if (arr === undefined) {console.log("failed"); return}
         const sortArr = arr.sort(function(el1,el2) {
             if (!el1.complete && !el2.complete) {
                 if (!el1.dueDate && !el2.dueDate) {
@@ -37,8 +37,8 @@ class Todo {
                 } else {
                     let date1 = new Date(`${el1.dueDate} ${el1.dueTime}`);
                     let date2 = new Date(`${el2.dueDate} ${el2.dueTime}`);
-                    //console.log(date1);
-                    //console.log(date2);
+                    // //console.log(date1);
+                    // //console.log(date2);
                     if (date1 > date2) {
                         return 1;
                     } else if (date1 < date2) {
@@ -56,22 +56,22 @@ class Todo {
             }});
 
             
-        console.log(sortArr);
+        // console.log(sortArr);
         return sortArr; 
     }
 
     static filterArrayinToday = function(arr) {
-        console.log(arr);
+        // console.log(arr);
         return arr.filter(dateFilter);
     }
 
     static filterArrayInWeek = function(arr) {
-        console.log(arr);
+        // console.log(arr);
         return weekFilter(arr);
     }
 
     static filterArrayForProj = function(arr,projName) {
-        console.log(arr);
+        // console.log(arr);
         
         return arr.filter((elem) => {
             return projFilter(elem,projName);
@@ -86,8 +86,8 @@ function dateFilter(todoObj) {
     const today = formatManager.formatToday();
     const todoDate = formatManager.formatDateY(todoObj.dueDate);
    
-    console.log(today);
-    console.log(todoDate);
+    // console.log(today);
+    // console.log(todoDate);
     return todoDate === today;
 }
 
@@ -103,14 +103,14 @@ function weekFilter(arr) {
         const forDay  = formatManager.formatDateYWOISO(day);
         formattedWeek.push(forDay);
         })
-        console.log(todoDate);
-        console.log(formattedWeek);
+        // console.log(todoDate);
+        // console.log(formattedWeek);
         formattedWeek.forEach((day) => {
             if (todoDate === day) {
                 matchArr.push(todoObj);
-                console.log(matchArr);
+                // console.log(matchArr);
             } else {
-                console.log("date void");
+                // console.log("date void");
             }
         })
     })
@@ -118,20 +118,20 @@ function weekFilter(arr) {
 }
 
 function projFilter(elem,projName) {
-    console.log(elem);
-    console.log(elem.project.toLowerCase());
-    console.log(projName);
+    // console.log(elem);
+    // console.log(elem.project.toLowerCase());
+    // console.log(projName);
     return elem.project.toLowerCase() === projName.toLowerCase();
 }
 
 function update() {
     localStorage.clear();
-    console.log(localStorage);
+    // console.log(localStorage);
     const todoArr = JSON.stringify(Todo.array);
     const projArr = JSON.stringify(Project.array);
     localStorage.setItem("todos",todoArr);
     localStorage.setItem("projects",projArr);
-    console.log(localStorage);
+    // console.log(localStorage);
 }
 
 class Project {
@@ -146,7 +146,7 @@ class Project {
         projTab.textContent = title;
 
         const sidebar = document.querySelector("#sidebar");
-        console.log(sidebar);
+        // console.log(sidebar);
         sidebar.appendChild(projTab);
 
         const proj = {
@@ -155,13 +155,13 @@ class Project {
         }
 
         array.push(proj);
-        console.log(array);
+        // console.log(array);
         return projTab;
     }
 
     static removeProject = function(project) {
         Project.array.splice(Project.array.indexOf(project));
-        console.log(Project.array);
+        // console.log(Project.array);
         return Project.array;
     }
 }
