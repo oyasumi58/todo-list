@@ -1,4 +1,4 @@
-import { update, Project, cat,rat,Todo, formatManager,c } from './todo.js';
+import { update, Project, Todo, formatManager,c } from './todo.js';
 export { update, Project, Todo, formatManager,c } 
 import editImg from "./asset/square-edit-outline.svg";
 import { EventEmitter } from 'events';
@@ -223,6 +223,7 @@ const domManager = (function() {
     const editTodo = function(unique,todoObj) {
         const todoEl = document.querySelector(`[data-unique="${unique}"]`);
         console.log(todoObj);
+        
 
         // todoElem.setAttribute("class","todo");
         // todoElem.setAttribute("name","done");
@@ -266,6 +267,7 @@ const domManager = (function() {
         const projDiv = todoEl.querySelector(".todoProj");
         // projDiv.setAttribute("class","todoProj");
         projDiv.textContent = todoObj.project;
+        todoEl.setAttribute("data-todo-project",todoObj.project);
         // row2.appendChild(projDiv);
 
         const flexCon = todoEl.querySelector(".flexCon");
@@ -314,13 +316,13 @@ const domManager = (function() {
     return { appendDelBtn, removeOption, appendProjOptions, createProjectEl, editTodo, appendTodoInAll, wipe, dispSelectedTab, stylePriority, };
 })();
 
-const catEl = new TodoElement(cat);
-const ratEl =new TodoElement(rat);
-domManager.appendTodoInAll(Todo.array);
+
+
+
 
 function signalAddEvent(editBtn,deleteBtn,todoData,todoObj) {
     emitter.emit('actionDone',editBtn,deleteBtn,todoData,todoObj);
 }
 
 
-export { domManager, TodoElement, emitter, signalAddEvent,catEl,ratEl };
+export { domManager, TodoElement, emitter, signalAddEvent };

@@ -1,6 +1,7 @@
 // import { format, parseISO } from "date-fns";
 import { format } from "date-fns";
-import { update, formatManager, Project, catEl, ratEl, Todo, TodoElement, domManager,c, signalAddEvent, emitter } from "./dom.js";
+import { update, formatManager, Project, Todo, TodoElement, domManager,c, signalAddEvent, emitter } from "./dom.js";
+export { projectManager, Todo, Project, update, domManager, todoManager, TodoElement, uiManager };
 
 console.log("appl check");
 let currentTab = "all";
@@ -493,18 +494,9 @@ const todoManager = (function() {
     return {autoFillInfo, addCheckMarkEvent, addEditEvent, addDeleteEvent};
 })();
 
-const catEditBtn = catEl.querySelector(".editBtn");
-const catDeleteBtn = catEl.querySelector(".deleteBtn");
-todoManager.addEditEvent(catEditBtn);
-todoManager.addDeleteEvent(catDeleteBtn);
 
-const ratEditBtn = ratEl.querySelector(".editBtn");
-const ratDeleteBtn = ratEl.querySelector(".deleteBtn");
-todoManager.addEditEvent(ratEditBtn);
-todoManager.addDeleteEvent(ratDeleteBtn);
 
-todoManager.addCheckMarkEvent(catEl);
-todoManager.addCheckMarkEvent(ratEl);
+
 
 emitter.on('actionDone', (editBtn,deleteBtn,data,todoObj) => {
     console.log(deleteBtn);
@@ -528,6 +520,14 @@ editDia.addEventListener("close", () => {
 const projectManager = (function() {
     let edited = false;
     let error = false;
+
+    function setEdited(bool) {
+        edited = bool;
+    }
+
+    function getEdited() {
+        return edited;
+    }
     function makeProject(newProjTab,prevProjValue,e) {
         error = false;
      
@@ -681,11 +681,13 @@ const projectManager = (function() {
                 uiManager.switchMainTab("all");
 
                 currentTab.remove();
+                domManager.removeOption("editDia",currentTab.getAttribute("data-project"));
+                domManager.removeOption("createDia",currentTab.getAttribute("data-project"));
             }
         })
     }
 
-    return { deleteButton, makeProject, getError };
+    return { setEdited, getEdited, deleteButton, makeProject, getError, edited };
 })();
 
 const createProjBtn = document.querySelector("#createProjBtn");
@@ -733,13 +735,5 @@ function testString(str) {
     return /^[a-zA-Z0-9\s]+$/.test(str);
 }
 
-window.addEventListener('beforeunload',(e) => {
-    update();
-});
 
-// window.addEventListener('load', function() {
-//   Todo.array = JSON.parse(localStorage.getItem("todos"));
-//   Project.array = JSON.parse(localStorage.getItem("projects"));
-//   console.log(Todo.array);
-//   console.log(Project.array);
-// }); //google how to turn stringied array into array
+

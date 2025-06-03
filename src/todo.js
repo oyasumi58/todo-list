@@ -1,6 +1,6 @@
 import { formatManager, c } from "./date.js"
 export { formatManager, c } 
-console.log("todso check");
+console.log("todo check");
 
 class Todo {
     static array = [];
@@ -79,8 +79,7 @@ class Todo {
     } 
 }
 
-const cat = new Todo("cat","","2025-05-07","17:53",'Trivial',"General");
-const rat = new Todo("rat","","2025-05-25","17:53",'Trivial',"General");
+
 
 function dateFilter(todoObj) {
     c(todoObj.dueDate);
@@ -126,6 +125,8 @@ function projFilter(elem,projName) {
 }
 
 function update() {
+    localStorage.clear();
+    console.log(localStorage);
     const todoArr = JSON.stringify(Todo.array);
     const projArr = JSON.stringify(Project.array);
     localStorage.setItem("todos",todoArr);
@@ -165,4 +166,4 @@ class Project {
     }
 }
 
-export { update, Project, Todo, cat, rat };
+export { update, Project, Todo };
