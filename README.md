@@ -1,7 +1,7 @@
 # Title
 
-##### Requirements:
-- Projects containing Todos as objects.
-- Each todo must have title, desc, due date, priority
-- Later consider having a Today, tmr, upcoming
-- UI stuff to have different views.
+Todo list with following features:
+- Projects and ability to create, rename and delete them.
+- Todos which have a title, description, date, time, priority, and can be edited / deleted
+- Auto sort of todos based on date
+- Built-in tabs of Today and this week.
